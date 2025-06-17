@@ -1,4 +1,8 @@
-### Register New Admin User
+########################
+### AUTH (Admin + User)
+########################
+
+### Register Admin
 POST http://localhost:4000/api/auth/register
 Content-Type: application/json
 
@@ -8,7 +12,17 @@ Content-Type: application/json
   "password": "adminpass123"
 }
 
-### Login and get JWT token
+### Register Normal User
+POST http://localhost:4000/api/auth/register
+Content-Type: application/json
+
+{
+  "user": "johndoe",
+  "email": "john@example.com",
+  "password": "userpass123"
+}
+
+### Login Admin
 POST http://localhost:4000/api/auth/login
 Content-Type: application/json
 
@@ -17,9 +31,23 @@ Content-Type: application/json
   "password": "adminpass123"
 }
 
-### 📌 Set the token manually here after login
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MDA2MDc1MiwiZXhwIjoxNzUwMTQ3MTUyfQ.QO0_pD98vrJAuBk8xJCLXxkpMKnIWtkl69hTYxQPy10
-### Create a new post (requires admin token)
+### Login Normal User
+POST http://localhost:4000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "userpass123"
+}
+
+### Paste token here after login
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MDEzNTE5MywiZXhwIjoxNzUwMjIxNTkzfQ.c-HVoGOcmVvRl_SBWgXqchtF5AVHG37odGW7aGzt9z4
+
+##################
+### POSTS CRUD
+##################
+
+### Create Post
 POST http://localhost:4000/api/posts
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
@@ -31,89 +59,129 @@ Authorization: Bearer {{TOKEN}}
   "cover_image": "https://your-supabase-url.storage.supabase.io/public/blog-images/sample.jpg"
 }
 
-### Get all posts (paginated)
+
+### Get All Posts
 GET http://localhost:4000/api/posts?limit=5&page=1
 
-### Get a single post by slug
+### Get Post by Slug
 GET http://localhost:4000/api/posts/my-first-blog-post
 
-### Update the post
+### Update Post
 PUT http://localhost:4000/api/posts/my-first-blog-post
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "title": "Updated Blog Post Title",
-  "content": "## Updated Content\nEdited this post.",
-  "tags": ["edited", "blog"],
+  "title": "updated blog post title",
+  "content": "## Updated Content\nPost edited.",
+  "tags": ["update", "blog"],
   "cover_image": "https://your-supabase-url.storage.supabase.io/public/blog-images/updated.jpg",
   "is_published": true
 }
 
-### Delete the post
+### Delete Post
 DELETE http://localhost:4000/api/posts/updated-blog-post-title
 Authorization: Bearer {{TOKEN}}
 
-##############################
-### FEEDBACK (Rating + Comment)
-##############################
+##################
+### COMMENTS
+##################
 
-@POST_ID="13bfd04d-2816-46d9-851a-0d06f087b025"
+@POST_ID = 9249340a-1a38-4f5b-93c4-ae0b493d9c9b
+@PARENT_COMMENT_ID = d1140ae6-0638-4ed4-8927-8feafa2f39c1
+@COMMENT_ID = 6b948765-ab93-4af2-b468-d8918d63903f
 
-### Submit feedback with comment
-POST http://localhost:4000/api/feedback
+### Create Top-Level Comment
+POST http://localhost:4000/api/comments
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "post_id": {{POST_ID}},
-  "rating": 5,
-  "comment": "Excellent article! Very helpful and well-written."
+  "post_id": "{{POST_ID}}",
+  "content": "This is a top-level comment."
 }
 
-### Submit feedback with rating only
+### Reply to a Comment (Nested)
+POST http://localhost:4000/api/comments
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "post_id": "{{POST_ID}}",
+  "content": "Replying to parent comment.",
+  "parent_comment_id": "{{PARENT_COMMENT_ID}}"
+}
+
+### Get Comments for a Post
+GET http://localhost:4000/api/comments/{{POST_ID}}
+Authorization: Bearer {{TOKEN}}
+
+### Update a Comment
+PATCH http://localhost:4000/api/comments/{{COMMENT_ID}}
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "content": "Updated comment content!"
+}
+
+### Delete a Comment
+DELETE http://localhost:4000/api/comments/{{COMMENT_ID}}
+Authorization: Bearer {{TOKEN}}
+
+##################
+### FEEDBACK
+##################
+
+### Add Feedback (rating + comment)
 POST http://localhost:4000/api/feedback
 Content-Type: application/json
 Authorization: Bearer {{TOKEN}}
 
 {
-  "post_id": {{POST_ID}},
+  "post_id": "{{POST_ID}}",
+  "rating": 5,
+  "comment": "Excellent blog post!"
+}
+
+### Add Rating Only
+POST http://localhost:4000/api/feedback
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "post_id": "{{POST_ID}}",
   "rating": 4
 }
 
-
-### Get all feedback for a post
-GET http://localhost:4000/api/feedback/post/13bfd04d-2816-46d9-851a-0d06f087b025
+### Get Feedback for a Post
+GET http://localhost:4000/api/feedback/post/{{POST_ID}}
 Authorization: Bearer {{TOKEN}}
 
-### Get average rating for a post
-GET http://localhost:4000/api/feedback/post/13bfd04d-2816-46d9-851a-0d06f087b025/average
+### Get Average Rating for a Post
+GET http://localhost:4000/api/feedback/post/{{POST_ID}}/average
 Authorization: Bearer {{TOKEN}}
-
-### Delete feedback for this post (by the same user)
-DELETE http://localhost:4000/api/feedback/post/ca9ee47e-cecf-40a0-a2cd-ccbb11dfa9e2
-Authorization: Bearer {{TOKEN}}
-
-### Create Feedback
-POST http://localhost:4000/api/feedback
-Content-Type: application/json
-Authorization: Bearer {{TOKEN}}
-
-{
-  "post_id": "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-  "user_id": 1,
-  "rating": 4,
-  "comment": "Great post!"
-}
-
-###
-
-GET http://localhost:4000/api/feedback/post/f47ac10b-58cc-4372-a567-0e02b2c3d479?page=1&limit=5
-Content-Type: application/json
-
-###
 
 ### Delete Feedback by ID
-DELETE http://localhost:4000/api/feedback/0ed6f30f-2e6a-4a39-8e0a-e99f4574c28a
+@FEEDBACK_ID = 887fb07a-b5b2-4e91-85c5-585b5d6bad64
+
+DELETE http://localhost:4000/api/feedback/post/{{FEEDBACK_ID}}
 Authorization: Bearer {{TOKEN}}
-Content-Type: application/json
+
+###
+GET http://localhost:4000/api/posts/top
+Authorization: Bearer {{TOKEN}}
+###
+POST http://localhost:4000/api/follow/4
+Authorization: Bearer {{TOKEN}}
+###
+DELETE http://localhost:4000/api/follow/4
+Authorization: Bearer {{TOKEN}}
+###
+GET http://localhost:4000/api/follow/4/followers
+###
+GET http://localhost:4000/api/follow/3/following
+###
+### 🔔 Get posts from followed authors
+GET http://localhost:4000/api/posts/following/posts
+Authorization: Bearer {{TOKEN}}

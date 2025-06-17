@@ -1,13 +1,19 @@
 import express from 'express';
-import {createPost,getPosts,getPostBySlug,updatePost,deletePost} from '../controllers/postController.js';
+import {createPost,getPosts,getPostBySlug,updatePost,deletePost, getTopPosts} from '../controllers/postController.js';
 
-import { authenticateToken, isAdmin } from '../middlewares/authMiddleware.js';
+import { authenticateToken } from '../middlewares/authMiddleware.js';
+import { incrementPostView } from '../controllers/postController.js';
+import { getFollowedPosts } from '../controllers/postController.js';
+
 
 const router = express.Router();
+router.get('/top', getTopPosts);
+router.get('/following/posts', authenticateToken, getFollowedPosts);
+router.post('/:slug/view', incrementPostView); 
 router.get('/', getPosts);
 router.get('/:slug', getPostBySlug);
-router.post('/', authenticateToken, isAdmin, createPost);
-router.put('/:slug', authenticateToken, isAdmin, updatePost);
-router.delete('/:slug', authenticateToken, isAdmin, deletePost);
+router.post('/', authenticateToken, createPost);
+router.put('/:slug', authenticateToken, updatePost);
+router.delete('/:slug', authenticateToken, deletePost);
 
 export default router;

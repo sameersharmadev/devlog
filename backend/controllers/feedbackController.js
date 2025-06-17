@@ -80,24 +80,23 @@ export const deleteFeedback = async (req, res) => {
     }
 };
 export const getAverageRating = async (req, res) => {
-    const { post_id } = req.params;
-  
-    try {
-      const result = await pool.query(
-        `SELECT AVG(rating)::numeric(3,2) AS average_rating FROM post_feedback WHERE post_id = $1`,
-        [post_id]
-      );
-  
-      const average = result.rows[0].average_rating;
-  
-      res.status(200).json({
-        success: true,
-        post_id,
-        average_rating: average ? parseFloat(average) : 0
-      });
-    } catch (err) {
-      console.error('Average Rating Fetch Error:', err);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  };
-  
+  const { post_id } = req.params;
+
+  try {
+    const result = await pool.query(
+      `SELECT AVG(rating)::numeric(3,2) AS average_rating FROM post_feedback WHERE post_id = $1`,
+      [post_id]
+    );
+
+    const average = result.rows[0].average_rating;
+
+    res.status(200).json({
+      success: true,
+      post_id,
+      average_rating: average ? parseFloat(average) : 0
+    });
+  } catch (err) {
+    console.error('Average Rating Fetch Error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};

@@ -18,18 +18,22 @@ async function generateUniqueSlug(baseSlug, excludeSlug = null) {
 export const createPost = async (req, res) => {
   try {
     const { title, content, tags = [], cover_image } = req.body;
+    const author_id = req.user.userId;
     const slug = await generateUniqueSlug(slugify(title));
+
     const result = await pool.query(
-      `INSERT INTO posts (title, slug, content, tags, cover_image)
-       VALUES ($1, $2, $3, $4, $5) RETURNING *`,
-      [title, slug, content, tags, cover_image]
+      `INSERT INTO posts (title, slug, content, tags, cover_image, author_id)
+       VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+      [title, slug, content, tags, cover_image, author_id]
     );
+
     res.status(201).json(result.rows[0]);
   } catch (err) {
     console.error('Create Post Error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 export const getPosts = async (req, res) => {
   try {
@@ -59,27 +63,55 @@ export const getPostBySlug = async (req, res) => {
   }
 };
 
+export const getFollowedPosts = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
+
+    const result = await pool.query(
+      `
+      SELECT p.*
+      FROM posts p
+      INNER JOIN follows f ON p.author_id = f.following_id
+      WHERE f.follower_id = $1 AND p.is_published = true
+      ORDER BY p.created_at DESC
+      LIMIT $2 OFFSET $3
+      `,
+      [userId, limit, offset]
+    );
+
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Get Followed Posts Error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 export const updatePost = async (req, res) => {
   try {
     const { slug } = req.params;
-    const { title, content, tags, cover_image, is_published } = req.body;
+    const { title, content, tags, cover_image, is_published=true } = req.body;
+    const { userId, role } = req.user;
     const original = await pool.query(`SELECT * FROM posts WHERE slug = $1`, [slug]);
     if (original.rows.length === 0) return res.status(404).json({ error: 'Post not found' });
-
-    const old = original.rows[0];
+    const post = original.rows[0];
+    if (post.author_id !== userId && role !== 'admin') {
+      return res.status(403).json({ error: 'You are not authorized to update this post' });
+    }
     const baseSlug = title ? slugify(title) : slug;
     const newSlug = await generateUniqueSlug(baseSlug, slug);
-
     const result = await pool.query(
       `UPDATE posts SET title = $1, slug = $2, content = $3, tags = $4, cover_image = $5,
        is_published = $6, updated_at = NOW() WHERE slug = $7 RETURNING *`,
       [
-        title || old.title,
+        title || post.title,
         newSlug,
-        content || old.content,
-        tags || old.tags,
-        cover_image || old.cover_image,
-        is_published ?? old.is_published,
+        content || post.content,
+        tags || post.tags,
+        cover_image || post.cover_image,
+        is_published ?? post.is_published,
         slug
       ]
     );
@@ -89,15 +121,69 @@ export const updatePost = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
 export const deletePost = async (req, res) => {
   try {
     const { slug } = req.params;
+    const { userId, role } = req.user;
+
+    const original = await pool.query(`SELECT * FROM posts WHERE slug = $1`, [slug]);
+    if (original.rows.length === 0) return res.status(404).json({ error: 'Post not found' });
+
+    const post = original.rows[0];
+    if (post.author_id !== userId && role !== 'admin') {
+      return res.status(403).json({ error: 'You are not authorized to delete this post' });
+    }
+
     const result = await pool.query(`DELETE FROM posts WHERE slug = $1 RETURNING *`, [slug]);
-    if (result.rows.length === 0) return res.status(404).json({ error: 'Post not found' });
-    res.status(200).json({ message: 'Post deleted successfully' });
+    res.status(200).json({ message: 'Post deleted successfully', post: result.rows[0] });
   } catch (err) {
     console.error('Delete Post Error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+export const incrementPostView = async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const result = await pool.query(
+      `UPDATE posts SET view_count = view_count + 1 WHERE slug = $1 RETURNING view_count`,
+      [slug]
+    );
+    if (result.rowCount === 0) return res.status(404).json({ error: 'Post not found' });
+
+    res.status(200).json({ views: result.rows[0].view_count });
+  } catch (err) {
+    console.error('Increment Post View Error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+export const getTopPosts = async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        p.*,
+        COALESCE(AVG(f.rating), 0) AS avg_rating,
+        COUNT(DISTINCT f.id) AS feedback_count,
+        COUNT(DISTINCT c.id) AS comment_count,
+        p.view_count,
+        (
+          COALESCE(AVG(f.rating), 0) * 0.5 +
+          COUNT(DISTINCT f.id) * 0.3 +
+          COUNT(DISTINCT c.id) * 0.1 +
+          p.view_count * 0.1
+        ) AS score
+      FROM posts p
+      LEFT JOIN post_feedback f ON p.id = f.post_id
+      LEFT JOIN post_comments c ON p.id = c.post_id
+      WHERE p.is_published = true
+      GROUP BY p.id
+      ORDER BY score DESC
+      LIMIT 10;
+    `);
+
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error('Get Top Posts Error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
