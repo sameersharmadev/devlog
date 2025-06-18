@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+    --color-darkBg: rgb(30,30,30);
+    --color-lightBg: rgb(244,246,248);
+    --color-darkCard: rgb(45, 45, 45);
+    --color-lightCard: rgb(232, 234, 236);
+    --color-darkText: rgb(244,244,244);
+    --color-lightText: rgb(30,30,30);
+    --color-accent: rgb(255, 64, 96);
+  }
