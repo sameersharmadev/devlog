@@ -1,11 +1,17 @@
 import { useState, useEffect, useRef, cloneElement } from 'react';
 import { Home, Flame, Star, Pencil, User, Sun, Moon, LogOut, Clock } from 'lucide-react';
 import { NavLink } from 'react-router';
+import SignupPopup from '../pages/Signup';
+import LoginPopup from '../pages/Login';
 import { jwtDecode } from 'jwt-decode';
 
 export default function Header() {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const userMenuRef = useRef(null);
+  const userMenuRefDesktop = useRef(null);
+  const userMenuRefMobile = useRef(null);
+
   const [user, setUser] = useState(null);
 
   const [theme, setTheme] = useState(() => {
@@ -46,7 +52,7 @@ export default function Header() {
             setUser({
               id: data.id,
               username: data.username,
-              avatar: data.avatar_url,
+              avatar_url: data.avatar_url,
             });
           })
           .catch((err) => {
@@ -62,13 +68,19 @@ export default function Header() {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
-        setUserMenuOpen(false);
+      if (
+        (userMenuRefDesktop.current && userMenuRefDesktop.current.contains(e.target)) ||
+        (userMenuRefMobile.current && userMenuRefMobile.current.contains(e.target))
+      ) {
+        return; 
       }
+      setUserMenuOpen(false); 
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
 
   const navItems = [
     { label: 'Home', icon: <Home />, path: '/' },
@@ -114,10 +126,10 @@ export default function Header() {
                   Write a blog
                 </NavLink>
 
-                <div className="relative" ref={userMenuRef}>
+                <div className="relative" ref={userMenuRefDesktop}>
                   <button onClick={() => setUserMenuOpen((prev) => !prev)}>
                     <img
-                      src={user.avatar || '/default-avatar.png'}
+                      src={user.avatar_url}
                       alt="avatar"
                       className="w-8 h-8 rounded-full"
                     />
@@ -125,7 +137,7 @@ export default function Header() {
 
                   {userMenuOpen && (
                     <div className="absolute right-0 top-10 bg-lightBg dark:bg-darkBg rounded shadow-md py-2 w-40 z-50">
-                      <div className="px-4 py-2 text-sm font-semibold">{user.username}</div>
+                      <div className="px-4 py-2 text-sm font-semibold">{user.username.length > 12 ? user.username.slice(0, 12) + '…' : user.username}</div>
                       <NavLink
                         to="/profile"
                         onClick={() => setUserMenuOpen(false)}
@@ -158,12 +170,14 @@ export default function Header() {
                 <button onClick={toggleTheme} className="hover:text-accent">
                   {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
                 </button>
-                <NavLink to="/login" className={({ isActive }) => `hover:text-accent ${isActive ? 'text-accent' : ''}`}>
+                <button onClick={() => setShowLogin(true)} className="hover:text-accent">
                   Login
-                </NavLink>
-                <NavLink to="/signup" className={({ isActive }) => `hover:text-accent ${isActive ? 'text-accent' : ''}`}>
+                </button>
+
+                <button onClick={() => setShowSignup(true)} className="hover:text-accent">
                   Signup
-                </NavLink>
+                </button>
+
               </>
             )}
           </div>
@@ -218,14 +232,14 @@ export default function Header() {
 
 
 
-          <div className="relative" ref={userMenuRef}>
+          <div className="relative" ref={userMenuRefMobile}>
             <button
               onClick={() => setUserMenuOpen((prev) => !prev)}
               className="flex flex-col items-center"
             >
               {user ? (
                 <img
-                  src={user.avatar}
+                  src={user.avatar_url}
                   className="w-6 h-6 rounded-full"
                   alt="avatar"
                 />
@@ -236,10 +250,10 @@ export default function Header() {
             </button>
 
             {userMenuOpen && (
-              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 bg-lightBg dark:bg-darkBg rounded shadow-md py-2 w-36">
+              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 bg-lightBg dark:bg-darkBg rounded shadow-md py-2 w-64">
                 {user ? (
                   <>
-                    <div className="px-4 py-2 text-sm font-semibold">{user.username}</div>
+                    <div className="px-4 py-2 text-sm font-semibold">{user.username.length > 12 ? user.username.slice(0, 12) + '…' : user.username}</div>
                     <NavLink
                       to="/profile"
                       onClick={() => setUserMenuOpen(false)}
@@ -274,25 +288,28 @@ export default function Header() {
                       <span>Theme</span>
                     </button>
 
-                    <NavLink
-                      to="/login"
-                      className={({ isActive }) =>
-                        `flex items-center gap-2 px-4 py-2 hover:bg-muted text-xs ${isActive ? 'text-accent' : ''}`
-                      }
+                    <button
+                      onClick={() => {
+                        setShowLogin(true);
+                        setUserMenuOpen(false);
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 hover:text-accent text-xs w-full text-left"
                     >
                       <User size={12} />
                       <span>Login</span>
-                    </NavLink>
+                    </button>
 
-                    <NavLink
-                      to="/signup"
-                      className={({ isActive }) =>
-                        `flex items-center gap-2 px-4 py-2 hover:bg-muted text-xs ${isActive ? 'text-accent' : ''}`
-                      }
+                    <button
+                      onClick={() => {
+                        setShowSignup(true);
+                        setUserMenuOpen(false);
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 hover:text-accent text-xs w-full text-left"
                     >
                       <User size={12} />
                       <span>Signup</span>
-                    </NavLink>
+                    </button>
+
                   </>
                 )}
               </div>
@@ -300,6 +317,9 @@ export default function Header() {
           </div>
         </div>
       </div>
+      {showSignup && <SignupPopup onClose={() => setShowSignup(false)} onLogin={setUser} />}
+      {showLogin && <LoginPopup onClose={() => setShowLogin(false)} onLogin={setUser} />}
+
     </div>
   );
 }

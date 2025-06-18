@@ -4,7 +4,6 @@ import User from './userpanel/UserPanel';
 import UserPost from './userpanel/UserPosts';
 
 const API = import.meta.env.VITE_API_BASE_URL;
-const TOKEN = import.meta.env.VITE_TOKEN;
 
 export default function UserPanel() {
   const [userData, setUserData] = useState(null);
@@ -12,6 +11,7 @@ export default function UserPanel() {
   const [loading, setLoading] = useState(true);
 
   const fetchAllData = async () => {
+    const TOKEN = localStorage.getItem('token');
     try {
       const userRes = await fetch(`${API}/api/auth/me`, {
         headers: { Authorization: `Bearer ${TOKEN}` },

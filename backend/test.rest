@@ -17,8 +17,8 @@ POST http://localhost:4000/api/auth/register
 Content-Type: application/json
 
 {
-  "user": "johndoe",
-  "email": "john@example.com",
+  "user": "johndoe1",
+  "email": "john22@example.com",
   "password": "userpass123"
 }
 
@@ -36,14 +36,27 @@ POST http://localhost:4000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "john@example.com",
+  "email": "john22@example.com",
   "password": "userpass123"
 }
+###
+
 
 ### Paste token here after login
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MDEzNTE5MywiZXhwIjoxNzUwMjIxNTkzfQ.c-HVoGOcmVvRl_SBWgXqchtF5AVHG37odGW7aGzt9z4
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MDIxNDQ1NSwiZXhwIjoxNzUwMzAwODU1fQ.t_vPOodAWWf6PAvRiWUn2AEMrss6eeSmiOEfdEdd4ik
 
 ##################
+GET http://localhost:4000/api/auth/me
+Authorization: Bearer {{TOKEN}}
+###
+PUT http://localhost:4000/api/auth/profile
+Content-Type: application/json
+Authorization: Bearer {{TOKEN}}
+
+{
+  "avatar_url": "https://api.dicebear.com/8.x/shapes/svg?seed=testuser",
+  "bio": "I love open-source and full-stack projects!"
+}
 ### POSTS CRUD
 ##################
 
@@ -59,6 +72,9 @@ Authorization: Bearer {{TOKEN}}
   "cover_image": "https://your-supabase-url.storage.supabase.io/public/blog-images/sample.jpg"
 }
 
+### Get my posts
+GET http://localhost:4000/api/posts/me
+Authorization: Bearer {{TOKEN}}
 
 ### Get All Posts
 GET http://localhost:4000/api/posts?limit=5&page=1

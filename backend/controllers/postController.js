@@ -186,4 +186,19 @@ export const getTopPosts = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+export const getMyPosts = async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const result = await pool.query(
+      'SELECT * FROM posts WHERE author_id = $1 ORDER BY created_at DESC',
+      [userId]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Failed to fetch user posts' });
+  }
+};
+
 

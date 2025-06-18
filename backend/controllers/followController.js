@@ -57,7 +57,7 @@ export const getFollowers = async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
     const result = await pool.query(
-      `SELECT u.id, u.username, u.email FROM follows f
+      `SELECT u.id, u.username, u.avatar_url FROM follows f
        JOIN users u ON f.follower_id = u.id
        WHERE f.following_id = $1`,
       [userId]
@@ -73,7 +73,7 @@ export const getFollowing = async (req, res) => {
   const userId = parseInt(req.params.id);
   try {
     const result = await pool.query(
-      `SELECT u.id, u.username, u.email FROM follows f
+      `SELECT u.id, u.username, u.avatar_url FROM follows f
        JOIN users u ON f.following_id = u.id
        WHERE f.follower_id = $1`,
       [userId]

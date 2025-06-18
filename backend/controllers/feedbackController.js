@@ -100,3 +100,22 @@ export const getAverageRating = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+export const getUserAverageRating = async (req, res) => {
+    const { user_id } = req.params;
+  
+    try {
+      const query = `
+        SELECT AVG(rating)::numeric(10,2) as average
+        FROM post_feedback
+        WHERE post_id IN (
+          SELECT id FROM posts WHERE author_id = $1
+        )
+      `;
+      const result = await pool.query(query, [user_id]);
+  
+      res.json({ average: result.rows[0].average || 0 });
+    } catch (err) {
+      console.error('Error calculating average rating:', err);
+      res.status(500).json({ error: 'Failed to calculate average rating' });
+    }
+  };
