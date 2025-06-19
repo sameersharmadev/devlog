@@ -1,0 +1,227 @@
+@import url('@radix-ui/colors/tomato-dark.css');
+@import url('@radix-ui/colors/mauve-dark.css');
+
+/* ========== DARK MODE ========== */
+.dark-editor {
+  --basePageBg: rgb(42, 42, 42);
+  --baseBg: rgb(42, 42, 42);
+  --baseText: rgb(230, 230, 230);
+  --baseBorder: rgb(60, 60, 60);
+  --baseBorderHover: rgb(80, 80, 80);
+  --accentText: #ff6b6b;
+  --accentTextContrast: #ffffff;
+  --accentBgHover: rgb(60, 60, 60);
+  --highlightBg: rgb(218, 220, 222);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  background-color: var(--basePageBg);
+  color: var(--baseText);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.dark-editor .cm-content {
+  caret-color: var(--accentTextContrast);
+}
+
+.dark-editor :not(.cm-cursor):not(.cm-selectionBackground):not(.cm-selectionMatch):not(.cm-activeLine) {
+  background-color: var(--baseBg) !important;
+  color: var(--baseText) !important;
+  border-color: var(--baseBorder) !important;
+}
+
+.dark-editor ul,
+.dark-editor ol {
+  padding-left: 1.25rem;
+}
+
+.dark-editor h1, .dark-editor h2, .dark-editor h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.dark-editor h1 { font-size: 2rem; }
+.dark-editor h2 { font-size: 1.75rem; }
+.dark-editor h3 { font-size: 1.5rem; }
+
+.dark-editor p {
+  margin-bottom: 1rem;
+}
+
+.dark-editor pre {
+  background-color: rgb(36, 36, 36);
+  color: #e0e0e0;
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.dark-editor code {
+  background-color: rgb(50, 50, 50);
+  color: #ffcb6b;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+.dark-editor .cm-editor,
+.dark-editor .cm-scroller {
+  background-color: var(--baseBg) !important;
+  color: var(--baseText) !important;
+}
+
+.dark-editor .cm-activeLine {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-editor .mdxeditor-toolbar button {
+  color: var(--baseText);
+}
+
+.dark-editor .mdxeditor-toolbar button:hover {
+  background-color: var(--accentBgHover);
+}
+
+.dark-editor .mdxeditor-select-content,
+.dark-editor .mdxeditor-popup-container,
+.dark-editor .mdxeditor-toolbar select,
+[data-radix-popper-content-wrapper] > [data-state],
+[aria-label="Language"] {
+  background-color: var(--baseBg) !important;
+  color: var(--baseText) !important;
+  border: 1px solid var(--baseBorderHover) !important;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  box-shadow: none !important;
+}
+
+.dark-editor .mdxeditor-select-content [data-highlighted],
+.dark-editor .mdxeditor-popup-container [data-highlighted],
+[data-radix-popper-content-wrapper] [data-highlighted] {
+  background-color: var(--accentBgHover) !important;
+  color: var(--accentTextContrast) !important;
+}
+
+/* ========== LIGHT MODE ========== */
+.light-editor {
+  --basePageBg: rgb(236, 238, 240); /* very slightly lighter than 232,234,236 */
+  --baseBg: rgb(236, 238, 240);
+  --baseText: rgb(20, 20, 20);
+  --baseBorder: rgba(0, 0, 0, 0.08);
+  --accentText: #c92a2a;
+  --accentBgHover: rgb(226, 228, 230);
+  --highlightBg: rgb(222, 224, 226);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  background-color: var(--basePageBg);
+  color: var(--baseText);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.light-editor .cm-content {
+  caret-color: black;
+}
+
+.light-editor :not(.cm-cursor):not(.cm-selectionBackground):not(.cm-selectionMatch):not(.cm-activeLine) {
+  background-color: var(--baseBg) !important;
+  color: var(--baseText) !important;
+  border-color: var(--baseBorder) !important;
+}
+
+.light-editor ul,
+.light-editor ol {
+  padding-left: 1.25rem;
+}
+
+.light-editor h1, .light-editor h2, .light-editor h3 {
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.light-editor h1 { font-size: 2rem; }
+.light-editor h2 { font-size: 1.75rem; }
+.light-editor h3 { font-size: 1.5rem; }
+
+.light-editor p {
+  margin-bottom: 1rem;
+}
+
+.light-editor pre {
+  background-color: #e4e6ea;
+  color: #333;
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.light-editor code {
+  background-color: #dee2e6;
+  color: #d6336c;
+  padding: 0.2em 0.4em;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+}
+
+.light-editor .cm-editor,
+.light-editor .cm-scroller {
+  background-color: var(--baseBg) !important;
+  color: var(--baseText) !important;
+}
+
+.light-editor .cm-activeLine {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.light-editor .mdxeditor-toolbar button {
+  color: var(--baseText);
+}
+
+.light-editor .mdxeditor-toolbar button:hover {
+  background-color: var(--accentBgHover);
+}
+
+.light-editor .mdxeditor-select-content,
+.light-editor .mdxeditor-popup-container,
+.light-editor .mdxeditor-toolbar select,
+[data-radix-popper-content-wrapper] > [data-state],
+[aria-label="Language"] {
+  background-color: var(--baseBg) !important;
+  color: var(--baseText) !important;
+  border: 1px solid var(--baseBorder) !important;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  box-shadow: none !important;
+}
+
+.light-editor .mdxeditor-popup-container [data-highlighted],
+.light-editor .mdxeditor-select-content [data-highlighted] {
+  background-color: var(--highlightBg) !important;
+  color: var(--baseText);
+}
+.rich-editor img {
+    max-height: 200px;
+    width: auto;
+    display: block;
+    margin: 1rem auto;
+  }
+  
+/* ========== EDITOR HEIGHT ========== */
+.rich-editor .cm-content {
+    padding: 1rem 0.5rem;
+    caret-color: inherit;
+  }
+  
+  /* Prevent invisible cursor on initial focus */
+  .rich-editor .cm-line:empty::before {
+    content: '';
+    display: inline-block;
+    height: 1rem;
+    width: 100%;
+  }
+  ._editImageButton_sects_937 {
+    display: none !important;
+  }
+  .mdxeditor-popup-container:empty {
+    display: none !important;
+  }
