@@ -10,7 +10,11 @@ import userRoutes from './routes/userRoutes.js';
 dotenv.config();
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: [
+        'http://localhost:5173',
+        'https://devlog-hmcjvqzxi-sameer-sharmas-projects-ccb3db7d.vercel.app',
+        'https://devlog.sameersharma.me/'
+      ],
     credentials: true               
   }));app.use(express.json());
 app.use('/api/users', userRoutes);
