@@ -1,11 +1,15 @@
 import pool from '../db/index.js';
 
 export const getUserById = async (req, res) => {
-  const userId = req.params.id;
+  const userId = parseInt(req.params.id, 10);
+
+  if (isNaN(userId) || userId <= 0) {
+    return res.status(400).json({ error: 'Invalid user ID' });
+  }
 
   try {
     const result = await pool.query(
-      'SELECT id, username, email, role, avatar_url, bio, created_at, updated_at FROM users WHERE id = $1',
+      'SELECT id, username, role, avatar_url, bio, created_at, updated_at FROM users WHERE id = $1',
       [userId]
     );
 
@@ -15,7 +19,7 @@ export const getUserById = async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (err) {
-    console.error('Error fetching user by ID:', err);
+    console.error('Error fetching user by ID:', err.message || err);
     res.status(500).json({ error: 'Server error' });
   }
 };

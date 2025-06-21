@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Image, ImagePlus } from 'lucide-react';
 import { supabase } from '../utilities/supabase';
 import {
@@ -24,10 +24,10 @@ import '../assets/stylesheets/WritePostEditor.css';
 
 export default function WritePostEditor() {
     const API = import.meta.env.VITE_API_BASE_URL;
-    const { slug } = useParams();
     const navigate = useNavigate();
 
     const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [tags, setTags] = useState('');
     const [coverImage, setCoverImage] = useState('');
     const [coverPreview, setCoverPreview] = useState('');
@@ -51,27 +51,6 @@ export default function WritePostEditor() {
         observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
         return () => observer.disconnect();
     }, []);
-
-    useEffect(() => {
-        if (!slug) return;
-        // Load post for edit
-        const fetchPost = async () => {
-            try {
-                const res = await fetch(`${API}/api/posts/${slug}`);
-                if (!res.ok) throw new Error('Failed to fetch post');
-                const post = await res.json();
-                setTitle(post.title);
-                setTags((post.tags || []).join(', '));
-                setContent(post.content);
-                setCoverImage(post.cover_image || '');
-                setCoverPreview(post.cover_image || '');
-            } catch (err) {
-                console.error('Error loading post:', err);
-                setError('Failed to load post');
-            }
-        };
-        fetchPost();
-    }, [slug]);
 
     const handleEditorContainerClick = (e) => {
         const editable = editorWrapperRef.current?.querySelector('[contenteditable="true"]');
@@ -152,11 +131,8 @@ export default function WritePostEditor() {
         }
         try {
             const token = localStorage.getItem('token');
-            const endpoint = slug ? `${API}/api/posts/${slug}` : `${API}/api/posts`;
-            const method = slug ? 'PUT' : 'POST';
-
-            const response = await fetch(endpoint, {
-                method,
+            const response = await fetch(`${API}/api/posts`, {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
@@ -164,6 +140,7 @@ export default function WritePostEditor() {
                 body: JSON.stringify({
                     title,
                     content,
+                    description,
                     tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
                     cover_image: coverImage || '',
                     is_published: true,
@@ -189,6 +166,19 @@ export default function WritePostEditor() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
+                <div>
+                    <textarea
+                        className="w-full p-2 rounded bg-white dark:bg-zinc-800 border dark:border-zinc-700 resize-none"
+                        placeholder="Post description"
+                        maxLength={250} // ⬅ Increased limit
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                    />
+                    <span className="text-xs text-muted-foreground text-right block">
+                        {description.length}/250
+                    </span>
+                </div>
+
                 <input
                     className="w-full p-2 rounded bg-white dark:bg-zinc-800 border dark:border-zinc-700"
                     placeholder="Tags (comma-separated)"
@@ -213,7 +203,7 @@ export default function WritePostEditor() {
                         onClick={handleSubmit}
                         className="mt-6 w-full lg:mt-8 px-6 py-2 border rounded-full hover:bg-white hover:text-[#1d3439] transition"
                     >
-                        {slug ? 'Update Post' : 'Publish Post'}
+                        Publish Post
                     </button>
                     {error && <p className="text-red-500 text-sm">{error}</p>}
                 </div>
@@ -225,7 +215,7 @@ export default function WritePostEditor() {
                 className="w-full lg:w-3/4 bg-lightCard dark:bg-darkCard p-4 rounded-xl flex flex-col"
             >
                 <MDXEditor
-                    className={`min-h-screen rich-editor w-full grow ${isDarkMode ? 'dark-editor dark-theme' : 'light-editor'}`}
+                    className={`prose dark:prose-invert min-h-screen rich-editor w-full grow ${isDarkMode ? 'dark-editor dark-theme' : 'light-editor'}`}
                     markdown={content || '\u200b'}
                     onChange={setContent}
                     ref={editorInstanceRef}
@@ -240,6 +230,7 @@ export default function WritePostEditor() {
                                 ts: 'TypeScript',
                                 css: 'CSS',
                                 html: 'HTML',
+                                bash: 'bash',
                             },
                         }),
                         markdownShortcutPlugin(),
@@ -269,12 +260,14 @@ export default function WritePostEditor() {
                     ]}
                 />
             </div>
+
+            {/* Mobile submit button */}
             <div className="lg:hidden w-full mt-0 px-4">
                 <button
                     onClick={handleSubmit}
                     className="w-full px-6 py-2 border rounded-full hover:bg-white hover:text-[#1d3439] transition"
                 >
-                    {slug ? 'Update Post' : 'Publish Post'}
+                    Publish Post
                 </button>
                 {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
             </div>

@@ -71,7 +71,7 @@
 }
 
 .dark-editor .cm-activeLine {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgb(42,42,42) !important;
 }
 
 .dark-editor .mdxeditor-toolbar button {
@@ -104,7 +104,7 @@
 
 /* ========== LIGHT MODE ========== */
 .light-editor {
-  --basePageBg: rgb(236, 238, 240); /* very slightly lighter than 232,234,236 */
+  --basePageBg: rgb(236, 238, 240); 
   --baseBg: rgb(236, 238, 240);
   --baseText: rgb(20, 20, 20);
   --baseBorder: rgba(0, 0, 0, 0.08);
@@ -206,13 +206,12 @@
     margin: 1rem auto;
   }
   
-/* ========== EDITOR HEIGHT ========== */
+
 .rich-editor .cm-content {
     padding: 1rem 0.5rem;
     caret-color: inherit;
   }
   
-  /* Prevent invisible cursor on initial focus */
   .rich-editor .cm-line:empty::before {
     content: '';
     display: inline-block;
@@ -225,3 +224,7 @@
   .mdxeditor-popup-container:empty {
     display: none !important;
   }
+  .rich-editor.prose {
+    max-width: 100% !important;
+  }
+  

@@ -23,9 +23,11 @@ export const getCommentsByPost = async (req, res) => {
     const { post_id } = req.params;
 
     const result = await pool.query(
-      `SELECT c.*, u.username FROM post_comments c
+    `SELECT c.*, u.username, u.avatar_url, u.id as user_id
+       FROM post_comments c
        JOIN users u ON c.user_id = u.id
-       WHERE post_id = $1 ORDER BY created_at ASC`,
+       WHERE c.post_id = $1
+       ORDER BY c.created_at ASC`,
       [post_id]
     );
 
@@ -35,6 +37,7 @@ export const getCommentsByPost = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 export const updateComment = async (req, res) => {
   try {

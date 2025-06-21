@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Pencil, X, Sun, Moon, Loader2, Check, Crown } from 'lucide-react';
 import { supabase, uploadAvatar } from '../../utilities/supabase';
-
+import { Link } from 'react-router'
 export default function User({ user, refresh }) {
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const [saveError, setSaveError] = useState('');
@@ -338,14 +338,19 @@ export default function User({ user, refresh }) {
                   </p>
                 ) : (
                   (showPopup === 'followers' ? followers : following).map((user) => (
-                    <div key={user.id} className="flex items-center gap-3 bg-lightBg dark:bg-darkBg p-2 rounded">
+                    <Link
+                      key={user.id}
+                      to={`/user/${user.id}`}
+                      onClick={() => setShowPopup(null)}
+                      className="flex items-center gap-3 bg-lightBg dark:bg-darkBg p-2 rounded hover:bg-accent/10"
+                    >
                       <img
                         src={user.avatar_url || getDefaultAvatar(user.username)}
                         alt={user.username}
                         className="w-10 h-10 rounded-full"
                       />
                       <span className="text-sm">{user.username}</span>
-                    </div>
+                    </Link>
                   ))
                 )}
               </div>

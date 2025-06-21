@@ -1,11 +1,45 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
+@plugin "@tailwindcss/typography";
+
 @theme {
-    --color-darkBg: rgb(30,30,30);
-    --color-lightBg: rgb(244,246,248);
-    --color-darkCard: rgb(45, 45, 45);
-    --color-lightCard: rgb(232, 234, 236);
-    --color-darkText: rgb(244,244,244);
-    --color-lightText: rgb(30,30,30);
-    --color-accent: rgb(255, 64, 96);
-  }
+  --color-darkBg: rgb(30, 30, 30);
+  --color-lightBg: rgb(244, 246, 248);
+  --color-darkCard: rgb(45, 45, 45);
+  --color-lightCard: rgb(232, 234, 236);
+  --color-darkText: rgb(244, 244, 244);
+  --color-lightText: rgb(30, 30, 30);
+  --color-accent: rgb(255, 64, 96);
+}
+
+.prose pre {
+  border: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.prose pre code {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+.prose blockquote {
+  border-left: none !important;
+  padding-left: 0 !important;
+}
+.comment-replies {
+  position: relative;
+  padding-left: 1rem; /* same as your ml-4 or ml-3 spacing */
+}
+
+.comment-replies::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1rem;           /* horizontal part */
+  height: 1rem;          /* vertical part height */
+  border-left: 1px solid rgba(200, 200, 200, 0.5);  /* vertical */
+  border-bottom: 1px solid rgba(200, 200, 200, 0.5); /* horizontal */
+}

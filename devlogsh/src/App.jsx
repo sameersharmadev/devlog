@@ -1,20 +1,32 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, BrowserRouter } from "react-router";
 import Header from './components/Header';
 import Home from './pages/Home';
 import UserPanel from './pages/UserPanel'
 import SignUp from './pages/Signup'
 import Write from './pages/Write'
+import Trending from './pages/Trending'; 
+import Latest from './pages/Latest'; 
+import PostDetail from './components/PostDetail'
+import ScrollToTop from './utilities/ScrollToTop'
+import UserProfile from './pages/UserProfile'; 
+import FollowingFeed from './pages/FollowingFeed'; 
 
 function App() {
   
   return (
     <div className="bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText min-h-screen">
       <Header/>
+      <ScrollToTop/>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<UserPanel />} />
         <Route path="/signup" element={<SignUp/>}/>
         <Route path="/write" element={<Write/>}/>
+        <Route path="/post/:slug" element={<PostDetail />} />
+        <Route path="/user/:id" element={<UserProfile />} /> 
+        <Route path="/trending" element={<Trending/>}/>
+        <Route path="/latest" element={<Latest/>}/>
+        <Route path="/for-you" element={<FollowingFeed/>}/>
       </Routes>
       <div style={{ height: '40px' }} />
     </div>
