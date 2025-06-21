@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import CommentList from '../components/comments/CommentList';
+import LoginPopup from '../pages/Login';
 
 export default function PostDetail() {
     const { slug } = useParams();
@@ -15,9 +16,11 @@ export default function PostDetail() {
     const token = localStorage.getItem('token');
 
     const [post, setPost] = useState(null);
+    const [author, setAuthor] = useState(null);
     const [averageRating, setAverageRating] = useState(null);
     const [userRating, setUserRating] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showLoginPopup, setShowLoginPopup] = useState(false);
 
     useEffect(() => {
         fetchPost();
@@ -27,6 +30,7 @@ export default function PostDetail() {
         if (post) {
             fetchAverageRating(post.id);
             fetchUserRating(post.id);
+            fetchAuthor(post.author_id);
         }
     }, [post]);
 
@@ -37,13 +41,24 @@ export default function PostDetail() {
             if (!res.ok) throw new Error('Post not found');
             const postData = await res.json();
             setPost(postData);
-            fetch(`${BASE_URL}/api/posts/${slug}/view`, {
-                method: 'POST',
-            }).catch((err) => console.error('Error incrementing view:', err));
+            fetch(`${BASE_URL}/api/posts/${slug}/view`, { method: 'POST' }).catch((err) =>
+                console.error('Error incrementing view:', err)
+            );
         } catch (e) {
             console.error(e);
         } finally {
             setLoading(false);
+        }
+    }
+
+    async function fetchAuthor(authorId) {
+        try {
+            const res = await fetch(`${BASE_URL}/api/users/${authorId}`);
+            if (!res.ok) throw new Error('Author not found');
+            const data = await res.json();
+            setAuthor(data);
+        } catch (e) {
+            console.error('Error fetching author:', e);
         }
     }
 
@@ -65,24 +80,25 @@ export default function PostDetail() {
             });
             if (res.ok) {
                 const data = await res.json();
-                if (data.alreadyRated) {
-                    setUserRating(data.rating);
-                } else {
-                    setUserRating(null); 
-                }
+                setUserRating(data.alreadyRated ? data.rating : null);
             }
         } catch (e) {
             console.error('Error fetching user rating:', e);
         }
     }
 
-
     async function handleRatingSubmit(rating) {
-        if (!token) return;
+        if (!token) {
+            setShowLoginPopup(true);
+            return;
+        }
         try {
             await fetch(`${BASE_URL}/api/feedback`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
                 body: JSON.stringify({ post_id: post.id, rating }),
             });
             setUserRating(rating);
@@ -99,14 +115,16 @@ export default function PostDetail() {
 
     return (
         <div className="w-full max-w-[1300px] mx-auto p-4 min-h-screen">
-            <button onClick={() => navigate(-1)} className="cursor-pointer my-2 opacity-70">
-                Back
-            </button>
+            <div className="flex flex-col justify-start items-start mb-4">
+                <button onClick={() => navigate(-1)} className="cursor-pointer my-2 opacity-70">
+                    Back
+                </button>
+
+            </div>
 
             <h1 className="text-2xl font-bold my-2">{post.title}</h1>
             <p className="text-base my-2">{post.description}</p>
 
-            {/* Tags */}
             <div className="flex flex-wrap gap-2 my-2">
                 {post.tags?.map((tag, i) => (
                     <span
@@ -116,7 +134,22 @@ export default function PostDetail() {
                         {tag}
                     </span>
                 ))}
+
             </div>
+            {author && (
+                <div
+                    className="flex items-center gap-2 mt-2 text-sm cursor-pointer hover:opacity-80"
+                    onClick={() => navigate(`/user/${author.id}`)}
+                >
+                    <span className="font-medium">Author:</span>
+                    <img
+                        src={author.avatar_url}
+                        alt="Author"
+                        className="w-6 h-6 rounded-full"
+                    />
+                    <span>{author.username}</span>
+                </div>
+            )}
 
             <p className="text-sm my-2 opacity-70">Updated at: {format(new Date(post.updated_at), 'PPP')}</p>
             <p className="text-sm my-2 opacity-70">
@@ -125,7 +158,6 @@ export default function PostDetail() {
 
             <hr className="opacity-20 my-4" />
 
-            {/* Markdown content */}
             <div className="prose dark:prose-invert rounded-2xl max-w-none overflow-hidden">
                 <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
@@ -141,16 +173,18 @@ export default function PostDetail() {
                         },
                         code({ node, inline, className, children, ...props }) {
                             const match = /language-(\w+)/.exec(className || '');
-                            if (inline || !match) {
-                                return <code className={className}>{children}</code>;
-                            }
+                            if (inline || !match) return <code className={className}>{children}</code>;
                             return (
                                 <SyntaxHighlighter
                                     key={isDarkMode ? 'dark' : 'light'}
                                     style={isDarkMode ? oneDark : oneLight}
                                     language={match[1]}
-                                    wrapLongLines={true}
-                                    customStyle={{ padding: '1rem', borderRadius: '0.75rem', background: 'transparent' }}
+                                    wrapLongLines
+                                    customStyle={{
+                                        padding: '1rem',
+                                        borderRadius: '0.75rem',
+                                        background: 'transparent',
+                                    }}
                                 >
                                     {String(children).replace(/\n$/, '')}
                                 </SyntaxHighlighter>
@@ -164,7 +198,6 @@ export default function PostDetail() {
 
             <hr className="opacity-20 my-4" />
 
-            {/* Rating */}
             <div className="mb-4 rounded-2xl py-4 text-neutral-800 dark:text-neutral-200">
                 <h2 className="text-lg mb-2 font-semibold">Rate this post:</h2>
                 {userRating ? (
@@ -183,13 +216,9 @@ export default function PostDetail() {
                 )}
             </div>
 
+            <CommentList postId={post.id} authorId={post.author_id} setShowLoginPopup={setShowLoginPopup} />
 
-            {/* Comment section */}
-            <CommentList
-                postId={post.id}
-                authorId={post.author_id}
-            />
-
+            {showLoginPopup && <LoginPopup onClose={() => setShowLoginPopup(false)} />}
         </div>
     );
 }

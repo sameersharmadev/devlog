@@ -86,10 +86,30 @@ export default function FollowingFeed() {
           ))}
 
         {posts.length === 0 && !loading && !error && (
-          <p className="text-center text-muted-foreground mt-4">
-            Follow more people and topics to customise your feed.
-          </p>
+          <div className="flex flex-col items-center justify-center mt-50 md:mt-0 md:h-[70vh] text-center text-muted-foreground px-4">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="96"
+              height="96"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              className="mb-4 text-zinc-400 dark:text-zinc-600"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15.59 14.37A4.5 4.5 0 008.41 14.37M9.75 9h.008v.008H9.75V9zm4.5 0h.008v.008h-.008V9zM21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <h3 className="text-lg font-semibold mb-1">Your feed is a little empty</h3>
+            <p className="text-sm max-w-sm">
+              Follow other developers and topics to start seeing personalized posts here.
+            </p>
+          </div>
         )}
+
 
         {!loading && hasMore && <div ref={observerRef} className="h-4" />}
 

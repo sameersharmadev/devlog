@@ -18,7 +18,7 @@ export default function CommentItem({ comment, onReply, onUpdated, authorId }) {
         <div className="mt-2">
             {/* User info */}
             <div className="flex items-center gap-2 mb-1">
-                <Link to={`/user/${comment.user_id}`} className="flex items-center gap-2 hover:underline">
+                <Link to={`/user/${comment.user_id}`} className="flex items-center gap-2 hover:opacity-80">
                     <img
                         src={comment.avatar_url || '/default-avatar.png'}
                         alt={comment.username}
@@ -52,16 +52,16 @@ export default function CommentItem({ comment, onReply, onUpdated, authorId }) {
 
             {/* Actions */}
             <div className="text-xs flex gap-4 mb-1">
-                <button onClick={() => onReply(comment.id)} className="text-accent hover:underline">
+                <button onClick={() => onReply(comment.id)} className="text-accent hover:opacity-80">
                     Reply
                 </button>
                 {comment.canEdit && (
-                    <button onClick={() => setIsEditing(true)} className="text-accent hover:underline">
+                    <button onClick={() => setIsEditing(true)} className="text-accent hover:opacity-80">
                         Edit
                     </button>
                 )}
                 {comment.canDelete && (
-                    <button onClick={handleDelete} className="text-accent hover:underline">
+                    <button onClick={handleDelete} className="text-accent hover:opacity-80">
                         Delete
                     </button>
                 )}

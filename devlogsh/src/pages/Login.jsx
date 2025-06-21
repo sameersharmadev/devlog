@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { NavLink } from 'react-router';
 
-export default function LoginPopup({ onClose, onLogin }) {
+export default function LoginPopup({ onClose }) {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const modalRef = useRef();
@@ -24,8 +24,7 @@ export default function LoginPopup({ onClose, onLogin }) {
       if (!res.ok) throw new Error(data.error || 'Login failed');
 
       localStorage.setItem('token', data.token);
-      onLogin?.(data.user);
-      onClose();
+      window.location.reload(); // 🔁 Force full app state refresh
     } catch (err) {
       setError(err.message);
     }

@@ -3,16 +3,25 @@ import { useNavigate } from 'react-router';
 import heroLight from '../../assets/images/hero2.webp';
 import heroDark from '../../assets/images/hero2.webp';
 import SignupPopup from '../Signup';
+import LoginPopup from '../Login';
 
 export default function Hero() {
   const [showSignup, setShowSignup] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
-  const token = localStorage.getItem('token'); 
+  const token = localStorage.getItem('token');
 
   return (
-    <section className="py-6 lg:py-16">
-      <div className="w-full max-w-[1300px] mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-between gap-10">
+    <section className="py-6 lg:py-16 relative">
+      {/* Top-right login/signup for mobile */}
+      {!token && (
+        <div className="absolute top-4 right-4 left-4 sm:hidden z-10 text-sm text-center font-semibold">
+          👋 <span className="opacity-80"> <a onClick={() => setShowLogin(true)} className="underline cursor-pointer hover:text-accent">Login</a> or <a onClick={() => setShowSignup(true)} className="underline cursor-pointer hover:text-accent">Sign up</a> for the best experience</span>
+        </div>
+      )}
 
+
+      <div className="w-full max-w-[1300px] mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-between gap-10">
         {/* Text Content */}
         <div className="text-center lg:text-left lg:w-7/12">
           <h1 className="text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight">
@@ -20,7 +29,7 @@ export default function Hero() {
             <span className="text-3xl md:text-6xl font-bold">Build, Write, and Share</span>
           </h1>
           <p className="text-lg lg:text-xl mt-4">
-            A space to share ideas, projects, lessons, and stories, and connect with a thriving global community of tech enthusiasts.
+            A space to share ideas, projects, lessons, and stories, and connect with a thriving community of tech enthusiasts.
           </p>
           {token ? (
             <button
@@ -51,6 +60,7 @@ export default function Hero() {
       </div>
 
       {showSignup && <SignupPopup onClose={() => setShowSignup(false)} />}
+      {showLogin && <LoginPopup onClose={() => setShowLogin(false)} />}
     </section>
   );
 }

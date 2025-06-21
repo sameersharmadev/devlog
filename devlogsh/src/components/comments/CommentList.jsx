@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import CommentItem from './CommentItem';
 import CommentForm from './CommentForm';
 
-export default function CommentList({ postId, authorId }) {
+export default function CommentList({ postId, authorId,setShowLoginPopup }) {
     const [comments, setComments] = useState([]);
     const [replyingTo, setReplyingTo] = useState(null);
 
@@ -19,7 +19,7 @@ export default function CommentList({ postId, authorId }) {
     return (
         <div className="mt-8 space-y-4 md:space-y-8">
             <div className="mb-8 md:mb-12">
-                <CommentForm postId={postId} onCommentPosted={fetchComments} />
+                <CommentForm postId={postId} onCommentPosted={fetchComments} setShowLoginPopup={setShowLoginPopup} />
             </div>
 
             {comments.map((comment) => (
@@ -42,6 +42,7 @@ export default function CommentList({ postId, authorId }) {
                             fetchComments();
                         }}
                         onCancel={() => setReplyingTo(null)}
+                        setShowLoginPopup={setShowLoginPopup}
                     />
                 </div>
             )}
