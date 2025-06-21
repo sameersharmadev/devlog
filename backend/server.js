@@ -23,5 +23,8 @@ app.use('/api/posts', postRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/follow', followRoutes);
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
+});
 
 app.listen(4000)
