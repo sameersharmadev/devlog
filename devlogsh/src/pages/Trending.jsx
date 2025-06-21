@@ -61,7 +61,6 @@ export default function Trending() {
 
   return (
     <div className="w-full max-w-[1300px] mx-auto p-4 pt-8">
-      <SectionHeading title="Trending Posts" />
 
       <div className="flex flex-col gap-4 w-full">
         {posts.length === 0 && loading ? (
