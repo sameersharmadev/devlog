@@ -188,21 +188,18 @@ export default function PostCard({ post }) {
                 <span>{truncateUsername(author.username)}</span>
               </Link>
 
-              <Link
-                to="/search"
-                onClick={(e) => e.stopPropagation()}
-                className="text-muted-foreground hover:text-foreground"
-              >
+              {currentUserId === post.author_id && (
                 <Link
                   to={`/write/${post.slug}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="flex items-center gap-1 px-3 py-1 "
+                  className="flex items-center gap-1 px-3 py-1"
                 >
                   <Pencil size={14} /> Edit post
                 </Link>
-              </Link>
+              )}
             </div>
           )}
+
         </div>
       </div>
     </div>
