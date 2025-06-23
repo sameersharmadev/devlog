@@ -3,6 +3,8 @@ import Header from './components/Header';
 import Home from './pages/Home';
 import UserPanel from './pages/UserPanel'
 import SignUp from './pages/Signup'
+import Login from './pages/Login'
+
 import Write from './pages/Write'
 import Trending from './pages/Trending'; 
 import Latest from './pages/Latest'; 
@@ -21,6 +23,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/profile" element={<UserPanel />} />
         <Route path="/signup" element={<SignUp/>}/>
+        <Route path="/login" element={<Login/>}/>
+
         <Route path="/write" element={<Write/>}/>
         <Route path="/write/:slug" element={<Write />} />
         <Route path="/post/:slug" element={<PostDetail />} />

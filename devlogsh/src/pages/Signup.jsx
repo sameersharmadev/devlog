@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { NavLink } from 'react-router';
 
-export default function SignupPopup({ onClose, onLogin }) {
+export default function SignupPopup({ onClose, onLogin, onSwitchToLogin }) {
   const [formData, setFormData] = useState({
     user: '',
     email: '',
@@ -54,12 +53,11 @@ export default function SignupPopup({ onClose, onLogin }) {
 
       localStorage.setItem('token', loginData.token);
       onLogin?.(loginData.user);
-      window.location.reload();
+      onClose();
     } catch (err) {
       setError(err.message);
     }
   };
-
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -115,10 +113,8 @@ export default function SignupPopup({ onClose, onLogin }) {
               >
                 {label}
               </label>
-
             </div>
           ))}
-
 
           {error && <p className="text-sm text-red-500 -mt-2">{error}</p>}
 
@@ -132,9 +128,16 @@ export default function SignupPopup({ onClose, onLogin }) {
 
         <p className="text-center text-sm mt-6">
           Already registered?{' '}
-          <NavLink to="/login" className="hover:underline" onClick={onClose}>
+          <button
+            type="button"
+            className="text-accent underline underline-offset-2"
+            onClick={() => {
+              onClose();
+              onSwitchToLogin?.();
+            }}
+          >
             Login
-          </NavLink>
+          </button>
         </p>
 
         <button

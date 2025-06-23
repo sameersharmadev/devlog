@@ -32,15 +32,12 @@ export default function FollowingPostsList({ limit = 6 }) {
         fetchFollowingPosts();
     }, [limit]);
 
-    // Hide the entire component if still loading
     if (loading) return null;
 
-    // Optional: show error
     if (error) {
         return <p className="text-center text-red-500">Error: {error}</p>;
     }
 
-    // Hide if no followed posts
     if (posts.length === 0) return null;
 
     return (

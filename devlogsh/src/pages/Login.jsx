@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { NavLink } from 'react-router';
 
-export default function LoginPopup({ onClose }) {
+export default function LoginPopup({ onClose, onLogin, onSwitchToSignup }) {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const modalRef = useRef();
@@ -24,7 +23,8 @@ export default function LoginPopup({ onClose }) {
       if (!res.ok) throw new Error(data.error || 'Login failed');
 
       localStorage.setItem('token', data.token);
-      window.location.reload(); // 🔁 Force full app state refresh
+      onLogin?.(data.user); 
+      window.location.reload();
     } catch (err) {
       setError(err.message);
     }
@@ -97,9 +97,16 @@ export default function LoginPopup({ onClose }) {
 
         <p className="text-center text-sm mt-6">
           Don’t have an account?{' '}
-          <NavLink to="/signup" className="text-accent hover:underline" onClick={onClose}>
+          <button
+            type="button"
+            className="text-accent underline underline-offset-2"
+            onClick={() => {
+              onClose();
+              onSwitchToSignup?.();
+            }}
+          >
             Sign up
-          </NavLink>
+          </button>
         </p>
 
         <button

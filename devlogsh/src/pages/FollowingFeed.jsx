@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Post from '../components/Post';
-import SectionHeading from '../components/SectionHeading';
 import PostCardSkeleton from '../components/skeletons/PostCardSkeleton';
 
 const LIMIT = 6;
