@@ -22,6 +22,7 @@ function App() {
         <Route path="/profile" element={<UserPanel />} />
         <Route path="/signup" element={<SignUp/>}/>
         <Route path="/write" element={<Write/>}/>
+        <Route path="/write/:slug" element={<Write />} />
         <Route path="/post/:slug" element={<PostDetail />} />
         <Route path="/user/:id" element={<UserProfile />} /> 
         <Route path="/trending" element={<Trending/>}/>

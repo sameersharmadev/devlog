@@ -1,25 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import heroLight from '../../assets/images/hero2.webp';
 import heroDark from '../../assets/images/hero2.webp';
 import SignupPopup from '../Signup';
 import LoginPopup from '../Login';
-
+import Dashboard from './Dashboard'; 
 export default function Hero() {
   const [showSignup, setShowSignup] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem('token'));
+  }, []);
+
+  if (token) {
+    return <Dashboard />; 
+  }
 
   return (
     <section className="py-6 lg:py-16 relative">
       {/* Top-right login/signup for mobile */}
-      {!token && (
-        <div className="absolute top-4 right-4 left-4 sm:hidden z-10 text-sm text-center font-semibold">
-          👋 <span className="opacity-80"> <a onClick={() => setShowLogin(true)} className="underline cursor-pointer hover:text-accent">Login</a> or <a onClick={() => setShowSignup(true)} className="underline cursor-pointer hover:text-accent">Sign up</a> for the best experience</span>
-        </div>
-      )}
-
+      <div className="absolute top-4 right-4 left-4 sm:hidden z-10 text-sm text-center font-semibold">
+        👋 <span className="opacity-80">
+          <a onClick={() => setShowLogin(true)} className="underline cursor-pointer hover:text-accent">Login</a> or
+          <a onClick={() => setShowSignup(true)} className="underline cursor-pointer hover:text-accent ml-1">Sign up</a>&nbsp;	
+          for the best experience
+        </span>
+      </div>
 
       <div className="w-full max-w-[1300px] mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-between gap-10">
         {/* Text Content */}
@@ -31,21 +40,12 @@ export default function Hero() {
           <p className="text-lg lg:text-xl mt-4">
             A space to share ideas, projects, lessons, and stories, and connect with a thriving community of tech enthusiasts.
           </p>
-          {token ? (
-            <button
-              onClick={() => navigate('/write')}
-              className="mt-6 lg:mt-8 px-6 py-2 border rounded-full hover:bg-white hover:text-[#1d3439] transition"
-            >
-              Write a blog post
-            </button>
-          ) : (
-            <button
-              onClick={() => setShowSignup(true)}
-              className="mt-6 lg:mt-8 px-6 py-2 border rounded-full hover:bg-white hover:text-[#1d3439] transition"
-            >
-              Join the community
-            </button>
-          )}
+          <button
+            onClick={() => setShowSignup(true)}
+            className="mt-6 lg:mt-8 px-6 py-2 border rounded-full hover:bg-white hover:text-[#1d3439] transition"
+          >
+            Join the community
+          </button>
         </div>
 
         {/* Hero Image */}

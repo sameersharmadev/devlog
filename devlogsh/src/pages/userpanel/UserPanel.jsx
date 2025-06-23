@@ -165,11 +165,7 @@ export default function User({ user, refresh }) {
   return (
     <section className="bg-lightBg dark:bg-darkBg text-black dark:text-white flex justify-center px-4 py-10">
       <div className="w-full max-w-[1300px]">
-        <div className="mb-6 -mt-6 flex justify-end md:hidden">
-          <button onClick={toggleTheme} className="hover:text-accent">
-            {isDark ? <Sun size={18} /> : <Moon size={18} />}
-          </button>
-        </div>
+
 
         <h2 className="text-3xl md:text-4xl font-semibold mb-12 text-center">
           Welcome, {user.username.charAt(0).toUpperCase() + user.username.slice(1)}
@@ -250,6 +246,17 @@ export default function User({ user, refresh }) {
                   <span className="text-sm font-semibold">Admin</span>
                 </div>
               )}
+              <div className="mt-4">
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('token');
+                    window.location.href = '/';
+                  }}
+                  className="text-red-500 hover:text-red-600 border border-red-500 hover:border-red-600 px-4 py-1 rounded text-sm transition"
+                >
+                  Logout
+                </button>
+              </div>
             </div>
           </div>
 

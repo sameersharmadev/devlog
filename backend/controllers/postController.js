@@ -199,7 +199,6 @@ export const getTopPosts = async (req, res) => {
       LIMIT $1 OFFSET $2
     `, [limit, offset]);
 
-    // ✅ Send just the array of posts, not an object
     res.status(200).json(result.rows);
   } catch (err) {
     console.error('Get Top Posts Error:', err);

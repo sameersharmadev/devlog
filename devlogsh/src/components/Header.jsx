@@ -4,6 +4,7 @@ import { NavLink } from 'react-router';
 import SignupPopup from '../pages/Signup';
 import LoginPopup from '../pages/Login';
 import { jwtDecode } from 'jwt-decode';
+import SearchBar from './SearchBar';
 
 export default function Header() {
   const [showLogin, setShowLogin] = useState(false);
@@ -72,15 +73,14 @@ export default function Header() {
         (userMenuRefDesktop.current && userMenuRefDesktop.current.contains(e.target)) ||
         (userMenuRefMobile.current && userMenuRefMobile.current.contains(e.target))
       ) {
-        return; 
+        return;
       }
-      setUserMenuOpen(false); 
+      setUserMenuOpen(false);
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
 
   const navItems = [
     { label: 'Home', icon: <Home />, path: '/' },
@@ -91,6 +91,14 @@ export default function Header() {
 
   return (
     <div className="cursor-default">
+      {/* Mobile Top Header */}
+      <div className="md:hidden fixed top-0 left-0 right-0 h-14 px-4 bg-lightBg dark:bg-darkBg flex items-center justify-between z-50 ">
+        <div className="text-lg font-bold w-3/4"><SearchBar/></div>
+        <button onClick={toggleTheme} className="text-muted-foreground hover:text-accent">
+          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+        </button>
+      </div>
+
       {/* Desktop Header */}
       <div className="hidden md:flex justify-center">
         <div className="w-full max-w-[1300px] border-b border-accent flex items-center justify-between px-4 py-3 md:py-4">
@@ -109,8 +117,8 @@ export default function Header() {
               </li>
             ))}
           </ul>
-
           <div className="flex items-center gap-6">
+          <SearchBar/>
             {user ? (
               <>
                 <button onClick={toggleTheme} className="hover:text-accent">
@@ -122,7 +130,7 @@ export default function Header() {
                     `flex items-center gap-2 border rounded-full px-3 py-2 text-sm transition-colors ${isActive ? 'border-accent text-accent' : 'dark:border-white hover:bg-white hover:text-[#1d3439] transition'}`
                   }
                 >
-                  <Pencil size={18} />
+                  <Pencil size={16} />
                   Write a blog
                 </NavLink>
 
@@ -137,7 +145,11 @@ export default function Header() {
 
                   {userMenuOpen && (
                     <div className="absolute right-0 top-10 bg-lightBg dark:bg-darkBg rounded shadow-md py-2 w-40 z-50">
-                      <div className="px-4 py-2 text-sm font-semibold">{user.username.length > 12 ? user.username.slice(0, 12) + '…' : user.username}</div>
+                      <div className="px-4 py-2 text-sm font-semibold">
+                        {user.username.length > 12
+                          ? user.username.slice(0, 12) + '…'
+                          : user.username}
+                      </div>
                       <NavLink
                         to="/profile"
                         onClick={() => setUserMenuOpen(false)}
@@ -173,11 +185,9 @@ export default function Header() {
                 <button onClick={() => setShowLogin(true)} className="hover:text-accent">
                   Login
                 </button>
-
                 <button onClick={() => setShowSignup(true)} className="hover:text-accent">
                   Signup
                 </button>
-
               </>
             )}
           </div>
@@ -229,97 +239,36 @@ export default function Header() {
             );
           })}
 
-
-
-
           <div className="relative" ref={userMenuRefMobile}>
-            <button
-              onClick={() => setUserMenuOpen((prev) => !prev)}
-              className="flex flex-col items-center"
-            >
-              {user ? (
+            {user ? (
+              <NavLink to="/profile" className="flex flex-col items-center">
                 <img
                   src={user.avatar_url}
                   className="w-6 h-6 rounded-full"
                   alt="avatar"
                 />
-              ) : (
-                <User size={24} />
-              )}
-              <span>Account</span>
-            </button>
-
-            {userMenuOpen && (
-              <div className="absolute bottom-10 left-1/2 -translate-x-1/2 bg-lightBg dark:bg-darkBg rounded shadow-md py-2 w-64">
-                {user ? (
-                  <>
-                    <div className="px-4 py-2 text-sm font-semibold">{user.username.length > 12 ? user.username.slice(0, 12) + '…' : user.username}</div>
-                    <NavLink
-                      to="/profile"
-                      onClick={() => setUserMenuOpen(false)}
-                      className="block px-4 py-2 hover:bg-muted text-xs"
-                    >
-                      View Profile
-                    </NavLink>
-                    <button
-                      onClick={toggleTheme}
-                      className="flex items-center gap-2 px-4 py-2 text-xs hover:text-accent"
-                    >
-                      {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />} Theme
-                    </button>
-                    <button
-                      onClick={() => {
-                        localStorage.removeItem('token');
-                        setUser(null);
-                        window.location.href = '/';
-                      }}
-                      className="flex items-center gap-2 px-4 py-2 text-xs hover:text-accent"
-                    >
-                      <LogOut size={14} /> Logout
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      onClick={toggleTheme}
-                      className="hover:text-accent flex items-center px-4 py-2 gap-2 text-xs"
-                    >
-                      {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
-                      <span>Theme</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setShowLogin(true);
-                        setUserMenuOpen(false);
-                      }}
-                      className="flex items-center gap-2 px-4 py-2 hover:text-accent text-xs w-full text-left"
-                    >
-                      <User size={12} />
-                      <span>Login</span>
-                    </button>
-
-                    <button
-                      onClick={() => {
-                        setShowSignup(true);
-                        setUserMenuOpen(false);
-                      }}
-                      className="flex items-center gap-2 px-4 py-2 hover:text-accent text-xs w-full text-left"
-                    >
-                      <User size={12} />
-                      <span>Signup</span>
-                    </button>
-
-                  </>
-                )}
-              </div>
+                <span>Account</span>
+              </NavLink>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    setShowLogin(true);
+                    setUserMenuOpen(false);
+                  }}
+                  className="flex flex-col items-center"
+                >
+                  <User size={20} />
+                  <span>Account</span>
+                </button>
+              </>
             )}
           </div>
         </div>
       </div>
+
       {showSignup && <SignupPopup onClose={() => setShowSignup(false)} onLogin={setUser} />}
       {showLogin && <LoginPopup onClose={() => setShowLogin(false)} onLogin={setUser} />}
-
     </div>
   );
 }

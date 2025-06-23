@@ -38,8 +38,25 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 1rem;           /* horizontal part */
-  height: 1rem;          /* vertical part height */
-  border-left: 1px solid rgba(200, 200, 200, 0.5);  /* vertical */
-  border-bottom: 1px solid rgba(200, 200, 200, 0.5); /* horizontal */
+  width: 1rem;         
+  height: 1rem;         
+  border-left: 1px solid rgba(200, 200, 200, 0.5);  
+  border-bottom: 1px solid rgba(200, 200, 200, 0.5); 
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgb(255, 64, 96);
+  border-radius: 6px;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255, 64, 96) transparent;
 }

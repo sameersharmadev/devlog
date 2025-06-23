@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Eye, MessageSquare, Star, Clock } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { Eye, MessageSquare, Star, Clock, Pencil, Search } from 'lucide-react';
+import { jwtDecode } from 'jwt-decode';
 
 function generateRandomGradient() {
   const hue1 = Math.floor(Math.random() * 360);
@@ -28,9 +28,10 @@ export default function PostCard({ post }) {
   const navigate = useNavigate();
   const [author, setAuthor] = useState(null);
   const [fallbackGradient, setFallbackGradient] = useState(null);
-  const [averageRating, setAverageRating] = useState(0); 
+  const [averageRating, setAverageRating] = useState(0);
   const [viewCount, setViewCount] = useState(post.view_count || 0);
   const [commentCount, setCommentCount] = useState(0);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,10 +66,18 @@ export default function PostCard({ post }) {
     };
 
     fetchData();
-    if (!post.cover_image) {
-      setFallbackGradient(generateRandomGradient());
+    if (!post.cover_image) setFallbackGradient(generateRandomGradient());
+
+    try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decoded = jwtDecode(token);
+        setCurrentUserId(decoded.userId);
+      }
+    } catch (err) {
+      console.error('Token decode error:', err);
     }
-  }, [post.author_id, post.cover_image, post.id, post.view_count]);
+  }, [post]);
 
   const summaryText = (() => {
     let rawText = post.description || post.content || '';
@@ -92,7 +101,7 @@ export default function PostCard({ post }) {
   return (
     <div
       onClick={handleCardClick}
-      className="bg-lightCard dark:bg-darkCard p-4 md:p-6 rounded-xl border border-neutral-200 dark:border-none flex flex-col md:flex-row gap-6 min-h-[220px] cursor-pointer"
+      className="bg-lightCard dark:bg-darkCard p-4 md:p-6 rounded-xl border border-neutral-200 dark:border-none flex flex-col md:flex-row gap-6 min-h-[220px] cursor-pointer relative"
     >
       {post.cover_image ? (
         <img
@@ -111,6 +120,7 @@ export default function PostCard({ post }) {
         <div>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-xl font-semibold">{capitalizeFirst(post.title)}</h3>
+            {/* Desktop Author */}
             {author && (
               <Link
                 to={`/user/${author.id}`}
@@ -130,7 +140,7 @@ export default function PostCard({ post }) {
         </div>
 
         <div className="mt-auto">
-          {post.tags && post.tags.length > 0 && (
+          {post.tags?.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-3">
               {post.tags.slice(0, 3).map((tag) => (
                 <span
@@ -143,31 +153,32 @@ export default function PostCard({ post }) {
             </div>
           )}
 
-          <div className="flex flex-wrap justify-between md:justify-start items-center text-sm gap-4 text-muted-foreground mb-3">
+          {/* Desktop: justify-between between stats and edit */}
+          <div className="hidden md:flex justify-between items-center text-sm text-muted-foreground mb-3">
             <div className="flex items-center gap-4 flex-wrap">
-              <div className="flex items-center gap-1">
-                <Star size={16} />
-                {averageRating.toFixed(1)}
-              </div>
-              <div className="flex items-center gap-1">
-                <Eye size={16} />
-                {viewCount}
-              </div>
-              <div className="flex items-center gap-1">
-                <MessageSquare size={16} />
-                {commentCount}
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock size={16} />
-                {readTime} min read
-              </div>
+              <div className="flex items-center gap-1"><Star size={16} />{averageRating.toFixed(1)}</div>
+              <div className="flex items-center gap-1"><Eye size={16} />{viewCount}</div>
+              <div className="flex items-center gap-1"><MessageSquare size={16} />{commentCount}</div>
+              <div className="flex items-center gap-1"><Clock size={16} />{readTime} min read</div>
             </div>
+            {currentUserId === post.author_id && (
+              <Link
+                to={`/write/${post.slug}`}
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1 px-3 py-1 rounded-full border hover:bg-white dark:hover:bg-zinc-700 transition"
+              >
+                <Pencil size={14} /> Edit post
+              </Link>
+            )}
+          </div>
 
-            {author && (
+          {/* Mobile: username + search icon row */}
+          {author && (
+            <div className="flex md:hidden justify-between items-center mt-1 text-sm text-muted-foreground">
               <Link
                 to={`/user/${author.id}`}
                 onClick={(e) => e.stopPropagation()}
-                className="flex md:hidden items-center gap-1 mt-1 text-sm text-muted-foreground hover:underline"
+                className="flex items-center gap-1 hover:underline"
               >
                 <img
                   src={author.avatar_url || '/default-avatar.png'}
@@ -176,8 +187,22 @@ export default function PostCard({ post }) {
                 />
                 <span>{truncateUsername(author.username)}</span>
               </Link>
-            )}
-          </div>
+
+              <Link
+                to="/search"
+                onClick={(e) => e.stopPropagation()}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <Link
+                  to={`/write/${post.slug}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-1 px-3 py-1 "
+                >
+                  <Pencil size={14} /> Edit post
+                </Link>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </div>

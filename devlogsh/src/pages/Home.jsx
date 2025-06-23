@@ -6,12 +6,12 @@ import Followed from './home/Following'
 
 export default function Home() {
     return (
-        <>
+        <div className="pt-14 md:pt-0">
             <Hero />
             <Featured />
             <Followed />
             <TopPostsList />
             <LatestPostsList />
-        </>
+        </div>
     )
 }

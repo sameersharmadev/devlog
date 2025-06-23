@@ -43,7 +43,7 @@ Content-Type: application/json
 
 
 ### Paste token here after login
-@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MDIxNDQ1NSwiZXhwIjoxNzUwMzAwODU1fQ.t_vPOodAWWf6PAvRiWUn2AEMrss6eeSmiOEfdEdd4ik
+@TOKEN = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1MDY1MTE5MiwiZXhwIjoxNzUwNzM3NTkyfQ.a9y0sLvQ97AfUm-FPbclrDrGudAzmIZpmLHT3mypUOk
 
 ##################
 GET http://localhost:4000/api/auth/me
@@ -200,4 +200,8 @@ GET http://localhost:4000/api/follow/3/following
 ###
 ### 🔔 Get posts from followed authors
 GET http://localhost:4000/api/posts/following/posts
+Authorization: Bearer {{TOKEN}}
+
+###
+GET http://localhost:4000/api/dashboard
 Authorization: Bearer {{TOKEN}}

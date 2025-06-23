@@ -54,7 +54,7 @@ export default function SignupPopup({ onClose, onLogin }) {
 
       localStorage.setItem('token', loginData.token);
       onLogin?.(loginData.user);
-      onClose();
+      window.location.reload();
     } catch (err) {
       setError(err.message);
     }

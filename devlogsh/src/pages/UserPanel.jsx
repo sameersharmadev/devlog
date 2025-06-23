@@ -60,16 +60,16 @@ export default function UserPanel() {
 
   if (loading) {
     return (
-      <section className="min-h-screen bg-lightBg dark:bg-darkBg text-black dark:text-white flex items-center justify-center">
+      <section className="min-h-screen bg-lightBg dark:bg-darkBg text-black dark:text-white flex items-center justify-center pt-20 md:pt-8">
         <p className="text-xl">Loading...</p>
       </section>
     );
   }
 
   return (
-    <>
+    <div className="pt-8 md:pt-8">
       <User user={userData} refresh={fetchAllData} />
       <UserPost posts={userPosts} />
-    </>
+    </div>
   );
 }
