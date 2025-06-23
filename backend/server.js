@@ -7,7 +7,7 @@ import feedbackRoutes from './routes/feedbackRoutes.js';
 import commentRoutes from './routes/commentRoutes.js';
 import followRoutes from './routes/followRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import dashboardRoute from './routes/dashboard.js';
+import dashboardRoute from './routes/dashboardRoute.js';
 import searchRoutes from './routes/search.js'
 dotenv.config();
 const app = express();
