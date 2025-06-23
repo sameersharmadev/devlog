@@ -75,7 +75,10 @@ export default function Dashboard() {
                         className="text-accent cursor-pointer hover:opacity-80"
                         onClick={() => navigate("/profile")}
                     >
-                        {(capitalizedName.charAt(0).toUpperCase() + capitalizedName.slice(1)).slice(0, 10) + (capitalizedName.length > 10 ? '...' : '')}
+                        <span className="hidden sm:inline">{capitalizedName}</span>
+                        <span className="inline sm:hidden">
+                            {capitalizedName.slice(0, 15) + (capitalizedName.length > 15 ? '...' : '')}
+                        </span>
                     </span>
                     !
                 </h2>
