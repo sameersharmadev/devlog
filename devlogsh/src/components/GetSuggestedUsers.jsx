@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Skeleton } from "@/components/ui/skeleton";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000';
 
@@ -136,9 +137,30 @@ export default function SuggestedUsers() {
         sliderRef.current?.scrollBy({ left: -300, behavior: 'smooth' });
     };
 
-    if (loading) return <p>Loading suggestions...</p>;
-    if (error) return <p className="text-red-500">{error}</p>;
-    if (!users.length) return <p>No suggestions available.</p>;
+    if (loading) {
+        return (
+            <div className="w-full max-w-[1300px] mx-auto rounded-lg relative py-6 px-4">
+                <div className="flex overflow-x-auto scroll-smooth scrollbar-hide snap-x snap-mandatory gap-4 justify-start">
+                    {[...Array(5)].map((_, i) => (
+                        <div
+                            key={i}
+                            className="flex-shrink-0 w-[90%] sm:w-[60%] md:w-52 h-64 rounded-lg p-4 flex flex-col items-center bg-lightCard dark:bg-darkCard"
+                        >
+                            <Skeleton className="w-20 h-20 rounded-full mb-3" />
+                            <Skeleton className="h-4 w-3/4 mb-2 rounded" />
+                            <Skeleton className="h-3 w-full mb-1 rounded" />
+                            <Skeleton className="h-3 w-5/6 mb-3 rounded" />
+                            <div className="flex-grow" />
+                            <Skeleton className="h-8 w-full mt-auto rounded-full" />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    }
+
+    if (error) return <p className="text-red-500 px-4">{error}</p>;
+    if (!users.length) return <p className="px-4">No suggestions available.</p>;
 
     return (
         <div className="w-full max-w-[1300px] mx-auto rounded-lg relative py-6">
@@ -242,17 +264,17 @@ export default function SuggestedUsers() {
             {/* Utility styles */}
             <style>{`
                 .scrollbar-hide::-webkit-scrollbar {
-                  display: none;
+                    display: none;
                 }
                 .scrollbar-hide {
-                  -ms-overflow-style: none;
-                  scrollbar-width: none;
+                    -ms-overflow-style: none;
+                    scrollbar-width: none;
                 }
                 .line-clamp-3 {
-                  display: -webkit-box;
-                  -webkit-line-clamp: 3;
-                  -webkit-box-orient: vertical;
-                  overflow: hidden;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
                 }
             `}</style>
         </div>
