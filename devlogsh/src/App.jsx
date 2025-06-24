@@ -18,38 +18,50 @@ import LoadingScreen from './components/LoadingScreen';
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const [delayPassed, setDelayPassed] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1200); 
+    // Small timeout to prevent showing app before fade-in loader
+    const timeout = setTimeout(() => {
+      setDelayPassed(true);
+    }, 50); // 50ms ensures fade-in runs
 
-    return () => clearTimeout(timer);
+    const loadingTimeout = setTimeout(() => {
+      setLoading(false);
+    }, 1200); // your loading duration
+
+    return () => {
+      clearTimeout(timeout);
+      clearTimeout(loadingTimeout);
+    };
   }, []);
 
-  if (loading) return <LoadingScreen />;
-
   return (
-    <div className="bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText min-h-screen">
-      <Header />
-      <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<UserPanel />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/write" element={<Write />} />
-        <Route path="/write/:slug" element={<Write />} />
-        <Route path="/post/:slug" element={<PostDetail />} />
-        <Route path="/user/:id" element={<UserProfile />} />
-        <Route path="/trending" element={<Trending />} />
-        <Route path="/latest" element={<Latest />} />
-        <Route path="/for-you" element={<FollowingFeed />} />
-        <Route path="/oauth-success" element={<OAuthSuccess />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <div style={{ height: '40px' }} />
-    </div>
+    <>
+      <LoadingScreen isLoading={loading} />
+      {delayPassed && (
+        <div className="bg-lightBg dark:bg-darkBg text-lightText dark:text-darkText min-h-screen">
+          <Header />
+          <ScrollToTop />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profile" element={<UserPanel />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/write" element={<Write />} />
+            <Route path="/write/:slug" element={<Write />} />
+            <Route path="/post/:slug" element={<PostDetail />} />
+            <Route path="/user/:id" element={<UserProfile />} />
+            <Route path="/trending" element={<Trending />} />
+            <Route path="/latest" element={<Latest />} />
+            <Route path="/for-you" element={<FollowingFeed />} />
+            <Route path="/oauth-success" element={<OAuthSuccess />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <div style={{ height: '40px' }} />
+        </div>
+      )}
+    </>
   );
 }
 

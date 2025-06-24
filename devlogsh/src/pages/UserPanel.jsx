@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import User from './userpanel/UserPanel';
 import UserPost from './userpanel/UserPosts';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import  UserSkeleton  from "../components/skeletons/UserSkeleton";
 
 const API = import.meta.env.VITE_API_BASE_URL;
 
@@ -9,6 +10,8 @@ export default function UserPanel() {
   const [userData, setUserData] = useState(null);
   const [userPosts, setUserPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(true);
+  const [opacityClass, setOpacityClass] = useState('opacity-100');
 
   const fetchAllData = async () => {
     const TOKEN = localStorage.getItem('token');
@@ -50,7 +53,11 @@ export default function UserPanel() {
     } catch (err) {
       console.error('Error fetching all user data:', err);
     } finally {
-      setLoading(false);
+      setOpacityClass('opacity-0');
+      setTimeout(() => {
+        setShowLoader(false);
+        setLoading(false);
+      }, 300);
     }
   };
 
@@ -58,25 +65,30 @@ export default function UserPanel() {
     fetchAllData();
   }, []);
 
-  if (loading) {
-    return (
-      <section className="h-[80vh] md:h-[75vh] bg-lightBg dark:bg-darkBg text-black dark:text-white flex flex-col items-center justify-center pt-20 md:pt-8">
-        <DotLottieReact
-          src="/animations/loading.lottie"
-          loop
-          autoplay
-          style={{ width: 200, height: 200 }}
-        />
-      </section>
-    );
-  }
-
-
-
   return (
-    <div className="pt-8 md:pt-8">
-      <User user={userData} refresh={fetchAllData} />
-      <UserPost posts={userPosts} />
-    </div>
+    <>
+      {showLoader && (
+        <section
+          className={`fixed inset-0 z-[9999] flex items-center justify-center bg-lightBg dark:bg-darkBg text-black dark:text-white transition-opacity duration-300 ${opacityClass}`}
+        >
+          <DotLottieReact
+            src="/animations/loading.lottie"
+            loop
+            autoplay
+            style={{ width: 200, height: 200 }}
+          />
+        </section>
+      )}
+
+      {!loading ? (
+        <>
+          <User user={userData} refresh={fetchAllData} />
+          <UserPost posts={userPosts} />
+        </>
+      ) : (
+        <UserSkeleton/>
+      )}
+
+    </>
   );
 }

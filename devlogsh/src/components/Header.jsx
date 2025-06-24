@@ -95,9 +95,6 @@ export default function Header() {
     <div className="cursor-default">
       {/* Mobile Top Header */}
       <div className="md:hidden fixed top-0 left-0 right-0 h-14 px-4 bg-lightBg dark:bg-darkBg flex items-center justify-between z-50 ">
-        <NavLink to="/" className="flex items-center gap-2">
-          <img src={logo} alt="logo" className="w-8 h-8" />
-        </NavLink>
         <div className="text-lg font-bold w-3/4"><SearchBar /></div>
         <button onClick={toggleTheme} className="text-muted-foreground hover:text-accent">
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
