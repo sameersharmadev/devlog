@@ -14,7 +14,7 @@ import PostDetail from './components/PostDetail';
 import ScrollToTop from './utilities/ScrollToTop';
 import UserProfile from './pages/UserProfile';
 import FollowingFeed from './pages/FollowingFeed';
-import LoadingScreen from './components/LoadingScreen'; // ⬅️ New import
+import LoadingScreen from './components/LoadingScreen'; 
 
 function App() {
   const [loading, setLoading] = useState(true);

@@ -62,7 +62,7 @@ export default function UserPanel() {
     return (
       <section className="h-[80vh] md:h-[75vh] bg-lightBg dark:bg-darkBg text-black dark:text-white flex flex-col items-center justify-center pt-20 md:pt-8">
         <DotLottieReact
-          src="https://lottie.host/fc49a1b3-9eb6-4ef2-bbf9-82b96a6ad9dd/RXSnSNoWLS.lottie"
+          src="/animations/loading.lottie"
           loop
           autoplay
           style={{ width: 200, height: 200 }}
