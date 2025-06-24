@@ -7,18 +7,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>devlog.sh</title>
   <link href="/src/index.css" rel="stylesheet">
-</head>
-
-<body className="">
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
-<script>
+  <script>
   if (localStorage.theme === 'dark') {
     document.documentElement.classList.add('dark');
   } else {
     document.documentElement.classList.remove('dark');
   }
 </script>
+</head>
+
+<body className="">
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 
 </html>
