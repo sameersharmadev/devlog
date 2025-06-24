@@ -144,7 +144,8 @@ export default function SuggestedUsers() {
                     {[...Array(5)].map((_, i) => (
                         <div
                             key={i}
-                            className="flex-shrink-0 w-[90%] sm:w-[60%] md:w-52 h-64 rounded-lg p-4 flex flex-col items-center bg-lightCard dark:bg-darkCard"
+                            style={{ scrollSnapAlign: 'center' }}
+                            className="snap-center flex-shrink-0 w-[90%] sm:w-[60%] md:w-52 h-64 rounded-lg p-4 flex flex-col items-center bg-[#f4f6f8] dark:bg-[#1e1e1e]"
                         >
                             <Skeleton className="w-20 h-20 rounded-full mb-3" />
                             <Skeleton className="h-4 w-3/4 mb-2 rounded" />
@@ -178,7 +179,7 @@ export default function SuggestedUsers() {
                                 key={user.id}
                                 onClick={() => navigate(`/user/${user.id}`)}
                                 style={{ scrollSnapAlign: 'center' }}
-                                className="cursor-pointer snap-center flex-shrink-0 w-[90%] sm:w-[60%] md:w-52 h-64 bg-lightCard dark:bg-darkCard rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-lg transition relative"
+                                className="cursor-pointer snap-center flex-shrink-0 w-[90%] sm:w-[60%] md:w-52 h-64 bg-[#f4f6f8] dark:bg-[#1e1e1e] rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-lg transition relative"
                                 title={user.username}
                             >
                                 <img
@@ -216,10 +217,10 @@ export default function SuggestedUsers() {
 
                 {/* Gradients */}
                 {showLeft && (
-                    <div className="pointer-events-none absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-white/80 to-transparent dark:from-zinc-900/80" />
+                    <div className="pointer-events-none absolute left-0 top-0 h-full w-10 bg-gradient-to-r from-white/80 to-transparent dark:from-[#1e1e1e]/80" />
                 )}
                 {showRight && (
-                    <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white/80 to-transparent dark:from-zinc-900/80" />
+                    <div className="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-white/80 to-transparent dark:from-[#1e1e1e]/80" />
                 )}
             </div>
 
@@ -230,14 +231,7 @@ export default function SuggestedUsers() {
                     aria-label="Scroll left"
                     className="absolute top-1/2 -left-2 -translate-y-1/2 z-10 rounded-full bg-zinc-700 p-2 shadow-lg hover:opacity-90 transition"
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
@@ -248,14 +242,7 @@ export default function SuggestedUsers() {
                     aria-label="Scroll right"
                     className="absolute top-1/2 -right-2 -translate-y-1/2 z-10 rounded-full bg-zinc-700 p-2 shadow-lg hover:opacity-90 transition"
                 >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6 text-white"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                 </button>
