@@ -125,7 +125,7 @@ export default function PostCard({ post }) {
               <Link
                 to={`/user/${author.id}`}
                 onClick={(e) => e.stopPropagation()}
-                className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:underline"
+                className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:opacity-80"
               >
                 <img
                   src={author.avatar_url || '/default-avatar.png'}
@@ -178,7 +178,7 @@ export default function PostCard({ post }) {
               <Link
                 to={`/user/${author.id}`}
                 onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1 hover:underline"
+                className="flex items-center gap-1 hover:opacity-80"
               >
                 <img
                   src={author.avatar_url || '/default-avatar.png'}
