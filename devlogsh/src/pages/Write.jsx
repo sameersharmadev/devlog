@@ -220,7 +220,7 @@ export default function WritePostEditor() {
     };
 
     return (
-        <div className="w-full max-w-[1300px] mx-auto min-h-screen p-4 text-black dark:text-white flex flex-col lg:flex-row gap-6 pt-20 md:pt-8">
+        <div className="w-full max-w-[1300px] mx-auto min-h-screen p-4 text-black dark:text-white flex flex-col lg:flex-row gap-6 pt-20">
             {/* Sidebar */}
             <div className="w-full lg:w-1/4 p-4 rounded-xl space-y-4 h-fit">
                 <input
