@@ -2,8 +2,10 @@ import express from 'express';
 import pool from '../db/index.js'
 import { register, login, getMe } from '../controllers/authController.js';
 import { authenticateToken } from '../middlewares/authMiddleware.js'
+import passport from '../oauth/passportStrategies.js';
+import jwt from 'jsonwebtoken';
 const router = express.Router();
-
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 router.post('/register', register);
 router.post('/login', login);
 router.get('/me', authenticateToken, getMe);
@@ -37,4 +39,24 @@ router.put('/profile', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'Failed to update profile' });
   }
 });
+
+router.get('/google', (req, res, next) => {
+  const from = req.query.from || '/';
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    prompt: 'select_account',
+    state: encodeURIComponent(from),
+  })(req, res, next);
+});
+
+router.get(
+  '/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login', session: false }),
+  (req, res) => {
+    const { token } = req.user;
+    const from = decodeURIComponent(req.query.state || '/');
+    res.redirect(`${FRONTEND_URL}/oauth-success?token=${token}&from=${from}`);
+  }
+);
+
 export default router

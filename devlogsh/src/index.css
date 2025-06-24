@@ -30,7 +30,7 @@
 }
 .comment-replies {
   position: relative;
-  padding-left: 1rem; /* same as your ml-4 or ml-3 spacing */
+  padding-left: 1rem; 
 }
 
 .comment-replies::before {

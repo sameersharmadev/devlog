@@ -1,0 +1,49 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 367 367" width="32" height="32">
+	<title>icon</title>
+	<defs>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp1">
+			<path d="m550.54-99.33v551.13h-734.83v-551.13z"/>
+		</clipPath>
+		<clipPath clipPathUnits="userSpaceOnUse" id="cp2">
+			<path d="m734.25-215v826.69h-1102.25v-826.69z"/>
+		</clipPath>
+	</defs>
+	<style>
+		.s0 { fill: #d0021b } 
+		.s1 { fill: none;stroke: #6bcdff;stroke-width: 2.8 } 
+		.s2 { fill: #ffffff } 
+		.s3 { fill: #44311e } 
+	</style>
+	<g id="Clip-Path" clip-path="url(#cp1)">
+		<g>
+			<g id="Clip-Path" clip-path="url(#cp2)">
+				<g>
+					<g>
+						<g>
+							<path class="s0" d="m183.8 354.9c-53.7 0-149.3-31.6-130.7-142.2 8.2-45.4 44.7-85.4 68.3-111.2 23.6-25.8 37.5-76.7 57.8-81 20.6-4.6 45.4 3.1 89.1 47.9 16.4 20.8 39.5 55.7 50.4 135.3 17.1 114.6-81.2 151.2-134.9 151.2z"/>
+						</g>
+						<g>
+							<path class="s0" d=""/>
+							<path class="s1" d=""/>
+						</g>
+					</g>
+					<g>
+						<g>
+							<path class="s2" d="m280.6 241.9c6.2-42.8 4-55.4-9.6-76.9-12.8-20.2-54.8-38.9-77.3-38.9-21.1 0-26.8 18.1-42.4 38.6-15.6 20.4-56.6 26.2-57.8 79.5-1 45.3 35.9 69.7 89.6 69.7 53.7 0 91.1-27.2 97.5-72z"/>
+						</g>
+					</g>
+				</g>
+			</g>
+			<g>
+				<g>
+					<path class="s3" d="m141.8 257.2c-4.6 0-8.3-3.7-8.3-8.2v-18.6c0-4.6 3.7-8.3 8.3-8.3 4.6 0 8.3 3.7 8.3 8.3v18.6c0 4.5-3.7 8.2-8.3 8.2z"/>
+				</g>
+			</g>
+			<g>
+				<g>
+					<path class="s3" d="m224.5 257.2c-4.6 0-8.3-3.7-8.3-8.2v-18.6c0-4.6 3.7-8.3 8.3-8.3 4.5 0 8.2 3.7 8.2 8.3v18.6c0 4.5-3.7 8.2-8.2 8.2z"/>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>

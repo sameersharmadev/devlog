@@ -96,21 +96,27 @@ export default function User({ user, refresh }) {
   const removeAvatar = async () => {
     const defaultAvatar = getDefaultAvatar(user.username);
     try {
-      await fetch(`${API}/api/users/avatar`, {
+      await fetch(`${API}/api/auth/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${TOKEN}`,
         },
-        body: JSON.stringify({ avatar_url: null }),
+        body: JSON.stringify({
+          avatar_url: defaultAvatar,
+          username: user.username,
+          bio: user.bio,
+          email: user.email
+        })
       });
 
       setAvatar(defaultAvatar);
       setIsAvatarDefault(true);
     } catch (err) {
-      console.error('Failed to remove avatar:', err.message);
+      console.error('Failed to reset avatar:', err.message);
     }
   };
+
 
   const handleSave = async () => {
     try {
@@ -133,8 +139,7 @@ export default function User({ user, refresh }) {
       }
 
       await refresh();
-      setSaveSuccess(true);
-      setTimeout(() => setSaveSuccess(false), 5000);
+      window.location.reload();
     } catch (err) {
       setSaveError('Something went wrong. Please try again.');
       console.error('Error saving profile:', err);
@@ -142,6 +147,7 @@ export default function User({ user, refresh }) {
       setIsSaving(false);
     }
   };
+
 
   const toggleTheme = () => {
     const html = document.documentElement;

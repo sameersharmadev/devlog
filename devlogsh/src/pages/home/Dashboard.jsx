@@ -6,7 +6,7 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
-
+import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -63,14 +63,17 @@ export default function Dashboard() {
     const trendUp = diff >= 0;
     const percentChange = sumFirst > 0 ? Math.abs(diff / sumFirst) * 100 : 0;
 
-    const capitalizedName =
-        username
+    const capitalizedName = username;
+
+    const renderSkeletonCard = () => (
+        <Skeleton className="h-[130px] rounded-xl" />
+    );
 
     return (
         <section className="py-6 lg:py-16 min-h-[40vh]">
             <div className="w-full max-w-[1300px] mx-auto px-4">
-                <h2 className="text-4xl text-center md:text-left md:text-4xl font-bold my-2">
-                    Welcome back,{" "}
+                <h2 className="text-4xl text-center md:text-left font-bold my-2">
+                    Welcome back{" "}
                     <span
                         className="text-accent cursor-pointer hover:opacity-80"
                         onClick={() => navigate("/profile")}
@@ -83,62 +86,72 @@ export default function Dashboard() {
                     !
                 </h2>
 
-
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 my-6">
-                    {/* Views */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                Views
-                                {trendUp ? (
-                                    <ArrowUpRight className="w-4 h-4 text-green-500" />
-                                ) : (
-                                    <ArrowDownRight className="w-4 h-4 text-red-500" />
-                                )}
-                            </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="text-2xl font-bold">
-                                {loading ? "..." : totalViews}
-                            </div>
-                            <p className="text-sm mt-1 text-muted-foreground">
-                                {trendUp ? "+" : "-"}
-                                {percentChange.toFixed(1)}% from last period
-                            </p>
-                        </CardContent>
-                    </Card>
+                    {loading ? (
+                        <>
+                            {renderSkeletonCard()}
+                            {renderSkeletonCard()}
+                            {renderSkeletonCard()}
+                            {renderSkeletonCard()}
+                        </>
+                    ) : (
+                        <>
+                            {/* Views */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2">
+                                        Views
+                                        {trendUp ? (
+                                            <ArrowUpRight className="w-4 h-4 text-green-500" />
+                                        ) : (
+                                            <ArrowDownRight className="w-4 h-4 text-red-500" />
+                                        )}
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-2xl font-bold">
+                                        {totalViews}
+                                    </div>
+                                    <p className="text-sm mt-1 text-muted-foreground">
+                                        {trendUp ? "+" : "-"}
+                                        {percentChange.toFixed(1)}% from last period
+                                    </p>
+                                </CardContent>
+                            </Card>
 
-                    {/* Views per post average */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Views/Post</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-2xl font-bold">
-                            {loading || !viewsPerPost.length
-                                ? "..."
-                                : Math.round(totalViews / viewsPerPost.length)}
-                        </CardContent>
-                    </Card>
+                            {/* Views/Post */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Views/Post</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-2xl font-bold">
+                                        {Math.round(totalViews / viewsPerPost.length || 0)}
+                                    </div>
+                                </CardContent>
+                            </Card>
 
-                    {/* Posts */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Posts</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-2xl font-bold">
-                            {loading ? "..." : postCount}
-                        </CardContent>
-                    </Card>
+                            {/* Posts */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Posts</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-2xl font-bold">{postCount}</div>
+                                </CardContent>
+                            </Card>
 
-                    {/* Avg Rating */}
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Avg Rating</CardTitle>
-                        </CardHeader>
-                        <CardContent className="text-2xl font-bold">
-                            {loading ? "..." : avgRating}
-                        </CardContent>
-                    </Card>
+                            {/* Avg Rating */}
+                            <Card>
+                                <CardHeader>
+                                    <CardTitle>Avg Rating</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="text-2xl font-bold">{avgRating}</div>
+                                </CardContent>
+                            </Card>
+                        </>
+                    )}
                 </div>
 
                 <button

@@ -38,7 +38,6 @@ export default function SignupPopup({ onClose, onLogin, onSwitchToLogin }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to signup');
 
-      // Auto-login
       const loginRes = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -120,11 +119,53 @@ export default function SignupPopup({ onClose, onLogin, onSwitchToLogin }) {
 
           <button
             type="submit"
-            className="mt-4 px-6 py-2 border rounded-full w-full hover:bg-white hover:text-[#1d3439] transition"
+            className="mt-4 px-6 py-2  rounded-full w-full bg-accent text-white hover:bg-white hover:text-[#1d3439] transition"
           >
             Signup
           </button>
         </form>
+
+        {/* Divider */}
+        <div className="relative my-6">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-zinc-300 dark:border-zinc-600" />
+          </div>
+          <div className="relative flex justify-center text-sm">
+            <span className="bg-lightBg dark:bg-darkBg px-2 text-muted-foreground">OR</span>
+          </div>
+        </div>
+
+        {/* Google OAuth button */}
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              const from = window.location.pathname;
+              window.location.href = `${import.meta.env.VITE_API_BASE_URL}/api/auth/google?from=${encodeURIComponent(from)}`;
+            }}
+            className="flex items-center justify-center w-full gap-3 border rounded-full px-4 py-2 bg-white text-[#1d3439] hover:bg-zinc-100 transition"
+          >
+            <svg className="w-5 h-5" viewBox="0 0 533.5 544.3" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M533.5 278.4c0-18.6-1.5-37.4-4.8-55.4H272.1v104.9h146.5c-6.4 34.1-26.2 62.9-55.9 82.1v68h90.1c52.6-48.4 81.1-119.6 81.1-199.6z"
+                fill="#4285F4"
+              />
+              <path
+                d="M272.1 544.3c74.3 0 136.6-24.5 182-66.4l-90.1-68c-25.1 17-57.3 27.1-91.9 27.1-70.5 0-130.3-47.7-151.7-111.8h-92.6v69.8c45.1 89.4 138.2 149.3 244.4 149.3z"
+                fill="#34A853"
+              />
+              <path
+                d="M120.4 325.2c-10.3-30.5-10.3-63.7 0-94.2v-69.8h-92.6c-39.1 76.4-39.1 166.7 0 243.1l92.6-69.1z"
+                fill="#FBBC05"
+              />
+              <path
+                d="M272.1 107.7c39.2-.6 76.8 13.3 105.6 39.6l79.2-79.2C408.6 23.5 341.6-1.2 272.1 0 165.9 0 72.9 59.9 27.8 149.3l92.6 69.8c21.3-64 81.1-111.4 151.7-111.4z"
+                fill="#EA4335"
+              />
+            </svg>
+            <span className="text-sm font-medium">Continue with Google</span>
+          </button>
+        </div>
 
         <p className="text-center text-sm mt-6">
           Already registered?{' '}

@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@lottiefiles/dotlottie-react": "^0.14.1",
+    "@lottiefiles/react-lottie-player": "^3.6.0",
     "@mdxeditor/editor": "^3.37.0",
     "@milkdown/crepe": "^7.13.2",
     "@milkdown/preset-gfm": "^7.13.2",

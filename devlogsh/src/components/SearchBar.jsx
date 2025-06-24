@@ -47,7 +47,6 @@ const SearchBar = () => {
     return (
         <div className="relative w-full md:w-xs">
             <div className="relative w-full">
-                {/* Search Icon inside input */}
                 <Search
                     size={16}
                     className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none"
@@ -59,7 +58,7 @@ const SearchBar = () => {
                     onChange={(e) => setQuery(e.target.value)}
                     onFocus={() => query && setShowDropdown(true)}
                     onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
-                    className="w-full bg-transparent border-0 border-b border-gray-400 dark:border-gray-500 outline-none pl-9 pr-3 py-2 text-sm dark:bg-darkBg"
+                    className="w-full bg-transparent border-0 border-b border-accent md:border-gray-400 md:dark:border-gray-500 outline-none pl-9 pr-3 py-2 text-sm dark:bg-darkBg"
                 />
             </div>
 
