@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import Post from '../components/Post';
 import PostCardSkeleton from '../components/skeletons/PostCardSkeleton';
+import SuggestedUsers from '../components/GetSuggestedUsers';
 
 const LIMIT = 6;
 
@@ -69,23 +70,12 @@ export default function FollowingFeed() {
   }, [fetchMorePosts, hasMore, loading]);
 
   return (
-    <div className="w-full max-w-[1300px] mx-auto p-4 pt-8">
+    <div className="w-full max-w-[1300px] mx-auto p-4 pt-20">
       <div className="flex flex-col gap-4 w-full">
-        {posts.length === 0 && loading ? (
-          Array.from({ length: 3 }).map((_, i) => (
-            <PostCardSkeleton key={`initial-skeleton-${i}`} />
-          ))
-        ) : (
-          posts.map((post) => <Post key={post.id} post={post} />)
-        )}
 
-        {loading && posts.length > 0 &&
-          Array.from({ length: 2 }).map((_, i) => (
-            <PostCardSkeleton key={`loadmore-skeleton-${i}`} />
-          ))}
-
+        {/* Empty Feed */}
         {posts.length === 0 && !loading && !error && (
-          <div className="flex flex-col items-center justify-center mt-50 md:mt-0 md:h-[70vh] text-center text-muted-foreground px-4">
+          <div className="flex flex-col items-center justify-center mt-20 md:mt-28 mb-16 text-center text-muted-foreground px-4">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="96"
@@ -104,20 +94,46 @@ export default function FollowingFeed() {
             </svg>
             <h3 className="text-lg font-semibold mb-1">Your feed is a little empty</h3>
             <p className="text-sm max-w-sm">
-              Follow other developers and topics to start seeing personalized posts here.
+              Follow other developers to start seeing personalized posts here.
             </p>
+            <div className="mt-8 w-full">
+              <SuggestedUsers />
+            </div>
           </div>
         )}
 
-
-        {!loading && hasMore && <div ref={observerRef} className="h-4" />}
-
-        {!hasMore && posts.length > 0 && (
-          <p className="text-center text-muted-foreground mt-4">
-            You've reached the end.
-          </p>
+        {/* Initial Skeletons */}
+        {posts.length === 0 && loading && (
+          Array.from({ length: 3 }).map((_, i) => (
+            <PostCardSkeleton key={`initial-skeleton-${i}`} />
+          ))
         )}
 
+        {/* Posts */}
+        {posts.length > 0 && (
+          <>
+            {posts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
+
+            {/* Loading more skeletons */}
+            {loading && Array.from({ length: 2 }).map((_, i) => (
+              <PostCardSkeleton key={`loadmore-skeleton-${i}`} />
+            ))}
+
+            {/* Observer for infinite scroll */}
+            {hasMore && !loading && <div ref={observerRef} className="h-4" />}
+
+            {/* End message */}
+            {!hasMore && (
+              <p className="text-center text-muted-foreground mt-4">
+                You&apos;ve reached the end.
+              </p>
+            )}
+          </>
+        )}
+
+        {/* Error */}
         {error && (
           <p className="text-center text-red-500 mt-4">Error: {error}</p>
         )}

@@ -4,6 +4,7 @@ import { Crown, X } from 'lucide-react';
 import Post from '../components/Post';
 import SectionHeading from '../components/SectionHeading';
 import PostCardSkeleton from '../components/skeletons/PostCardSkeleton';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function UserProfile() {
   const { id: userId } = useParams();
@@ -15,6 +16,7 @@ export default function UserProfile() {
   const [isFollowing, setIsFollowing] = useState(false);
   const [loadingFollow, setLoadingFollow] = useState(false);
   const [showPopup, setShowPopup] = useState(null);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
   const popupRef = useRef();
 
@@ -28,6 +30,7 @@ export default function UserProfile() {
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
+        setIsLoadingProfile(true);
         const [userRes, followersRes, followingRes, postsRes, ratingRes] = await Promise.all([
           fetch(`${API}/api/users/${userId}`),
           fetch(`${API}/api/follow/${userId}/followers`),
@@ -44,9 +47,11 @@ export default function UserProfile() {
         setPosts(postData.posts || []);
         const ratingData = await ratingRes.json();
         setAvgRating(ratingData.average || 0);
-        setIsLoadingPosts(false);
       } catch (err) {
         console.error('Error fetching public profile:', err);
+      } finally {
+        setIsLoadingProfile(false);
+        setIsLoadingPosts(false);
       }
     };
 
@@ -108,12 +113,12 @@ export default function UserProfile() {
     return date.toLocaleDateString(undefined, options);
   };
 
-  if (!user) {
-    return <div className="text-center text-gray-500 dark:text-gray-400 py-10">Loading profile...</div>;
+  if (isLoadingProfile) {
+    return <LoadingScreen isLoading={isLoadingProfile}/>;
   }
 
   return (
-    <section className="w-full flex justify-center bg-lightBg dark:bg-darkBg text-black dark:text-white px-4 py-10">
+    <section className="w-full flex justify-center bg-lightBg dark:bg-darkBg text-black dark:text-white px-4 py-20">
       <div className="w-full max-w-[1300px]">
         <div className="grid md:grid-cols-[1fr_2.5fr_1.5fr] gap-10 text-center md:text-left items-start">
           {/* Avatar */}
@@ -127,9 +132,7 @@ export default function UserProfile() {
 
           {/* User Info */}
           <div className="flex flex-col justify-center gap-3">
-            <h2 className="text-3xl font-semibold">
-              {user.username.charAt(0).toUpperCase() + user.username.slice(1)}
-            </h2>
+            <h2 className="text-3xl font-semibold capitalize">{user.username}</h2>
             {user.role === 'admin' && (
               <div className="flex items-center gap-1 justify-center md:justify-start text-accent">
                 <Crown size={16} />
@@ -154,12 +157,13 @@ export default function UserProfile() {
               <button
                 onClick={handleFollowToggle}
                 disabled={loadingFollow}
-                className={`w-40 text-center px-5 py-2 rounded-full text-white transition disabled:opacity-50 ${loadingFollow
+                className={`w-40 text-center px-5 py-2 rounded-full text-white transition disabled:opacity-50 ${
+                  loadingFollow
                     ? ''
                     : isFollowing
-                      ? 'bg-gray-500 hover:bg-gray-700'
-                      : 'bg-accent hover:opacity-90'
-                  }`}
+                    ? 'bg-gray-500 hover:bg-gray-700'
+                    : 'bg-accent hover:opacity-90'
+                }`}
               >
                 {loadingFollow ? 'Please wait' : isFollowing ? 'Unfollow' : 'Follow'}
               </button>

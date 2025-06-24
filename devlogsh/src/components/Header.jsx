@@ -100,10 +100,10 @@ export default function Header() {
           {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
         </button>
       </div>
-  
+
       {/* Desktop Header */}
-      <div className="hidden md:flex justify-center">
-        <div className="w-full max-w-[1300px] border-b border-accent flex items-center justify-between px-4 py-3 md:py-4">
+      <div className="hidden md:flex justify-center fixed top-0 left-0 right-0 z-50 bg-lightBg dark:bg-darkBg">
+        <div className="w-full max-w-[1300px] flex items-center justify-between px-4 py-3 md:py-3">
           <div className="flex items-center gap-6">
             <ul className="flex gap-8 items-center">
               {navItems.map(({ label, icon, path }) => (
@@ -137,7 +137,7 @@ export default function Header() {
                   <Pencil size={16} />
                   Write a blog
                 </NavLink>
-  
+
                 <div className="relative" ref={userMenuRefDesktop}>
                   <button onClick={() => setUserMenuOpen((prev) => !prev)}>
                     <img
@@ -146,7 +146,7 @@ export default function Header() {
                       className="w-8 h-8 rounded-full"
                     />
                   </button>
-  
+
                   {userMenuOpen && (
                     <div className="absolute right-0 top-10 bg-lightBg dark:bg-darkBg rounded shadow-md py-2 w-40 z-50">
                       <div className="px-4 py-2 text-sm font-semibold">
@@ -197,7 +197,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-  
+
       {/* Mobile Bottom Nav */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-lightBg dark:bg-darkBg">
         <div className="flex justify-around items-center py-2 text-xs relative">
@@ -228,7 +228,7 @@ export default function Header() {
                 </>
               );
             }
-  
+
             return (
               <NavLink
                 key={label}
@@ -242,7 +242,7 @@ export default function Header() {
               </NavLink>
             );
           })}
-  
+
           <div className="relative" ref={userMenuRefMobile}>
             {user ? (
               <NavLink to="/profile" className="flex flex-col items-center">
@@ -270,7 +270,7 @@ export default function Header() {
           </div>
         </div>
       </div>
-  
+
       {showSignup && (
         <SignupPopup
           onClose={() => setShowSignup(false)}
@@ -281,7 +281,7 @@ export default function Header() {
           }}
         />
       )}
-  
+
       {showLogin && (
         <LoginPopup
           onClose={() => setShowLogin(false)}

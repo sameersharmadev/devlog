@@ -59,7 +59,7 @@ export default function Latest() {
   }, [fetchMorePosts, hasMore, loading]);
 
   return (
-    <div className="w-full max-w-[1300px] mx-auto p-4 pt-20 md:pt-8">
+    <div className="w-full max-w-[1300px] mx-auto p-4 pt-20">
       <div className="flex flex-col gap-4 w-full">
         {posts.length === 0 && loading ? (
           Array.from({ length: 3 }).map((_, i) => (
