@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-
+import LoadingScreen from '../components/LoadingScreen'
 export default function OAuthSuccess() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
@@ -34,8 +34,8 @@ export default function OAuthSuccess() {
   }, [navigate, params]);
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <p className="text-muted-foreground text-sm">Logging you in...</p>
+    <div className="flex justify-center items-center h-screen">
+      <LoadingScreen/>
     </div>
   );
 }
