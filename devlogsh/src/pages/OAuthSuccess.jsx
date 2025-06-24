@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import LoadingScreen from '../components/LoadingScreen'
+import { useSearchParams } from 'react-router-dom';
+import LoadingScreen from '../components/LoadingScreen';
+
 export default function OAuthSuccess() {
-  const navigate = useNavigate();
   const [params] = useSearchParams();
 
   useEffect(() => {
@@ -18,24 +18,24 @@ export default function OAuthSuccess() {
         .then(res => res.json())
         .then(data => {
           if (data.id) {
-            navigate(from);
+            window.location.href = from; 
           } else {
             console.error('Invalid response', data);
-            navigate('/login');
+            window.location.href = '/login';
           }
         })
         .catch(err => {
           console.error('OAuth fetch failed:', err);
-          navigate('/login');
+          window.location.href = '/login';
         });
     } else {
-      navigate('/login');
+      window.location.href = '/login';
     }
-  }, [navigate, params]);
+  }, [params]);
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <LoadingScreen/>
+      <LoadingScreen />
     </div>
   );
 }
