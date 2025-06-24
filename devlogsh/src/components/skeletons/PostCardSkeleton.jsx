@@ -1,6 +1,6 @@
 export default function PostCardSkeleton() {
   return (
-    <div className="bg-card dark:bg-darkCard p-4 md:p-6 rounded-xl shadow-md flex flex-col md:flex-row gap-6 min-h-[220px] cursor-default animate-pulse">
+    <div className="bg-card dark:bg-darkCard p-4 md:p-6 rounded-xl flex flex-col md:flex-row gap-6 min-h-[220px] cursor-default animate-pulse">
       {/* Cover image placeholder */}
       <div className="w-full md:w-48 h-40 rounded-lg bg-muted dark:bg-zinc-700 flex-shrink-0" />
 
