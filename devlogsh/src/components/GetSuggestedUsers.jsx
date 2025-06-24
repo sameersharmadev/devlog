@@ -179,7 +179,7 @@ export default function SuggestedUsers() {
                                 key={user.id}
                                 onClick={() => navigate(`/user/${user.id}`)}
                                 style={{ scrollSnapAlign: 'center' }}
-                                className="cursor-pointer snap-center flex-shrink-0 w-[90%] sm:w-[60%] md:w-52 h-64 bg-[#f4f6f8] dark:bg-[#1e1e1e] rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-lg transition relative"
+                                className="cursor-pointer snap-center flex-shrink-0 w-[90%] sm:w-[60%] md:w-52 h-64 bg-lightCard dark:bg-darkCard rounded-lg shadow-md p-4 flex flex-col items-center hover:shadow-lg transition relative"
                                 title={user.username}
                             >
                                 <img
