@@ -26,10 +26,6 @@ export const getUserById = async (req, res) => {
 
 
 export const getSuggestedUsers = async (req, res) => {
-  console.log('Decoded JWT user:', req.user);
-  console.log('getSuggestedUsers called');
-  console.log('req.user:', req.user);
-
   const userId = req.user?.userId;
 
   if (!userId || isNaN(userId)) {

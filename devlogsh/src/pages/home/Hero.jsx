@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import heroLight from '../../assets/images/hero2.webp';
-import heroDark from '../../assets/images/hero2.webp';
+import hero from '../../assets/images/devlog_hero.webp';
 import SignupPopup from '../Signup';
 import LoginPopup from '../Login';
 import Dashboard from './Dashboard'; 
@@ -22,7 +21,7 @@ export default function Hero() {
   return (
     <section className="py-6 lg:py-16 relative">
       {/* Top-right login/signup for mobile */}
-      <div className="absolute top-4 right-4 left-4 sm:hidden z-10 text-sm text-center font-semibold">
+      <div className="absolute top-1 right-4 left-4 sm:hidden z-10 text-sm text-center font-semibold">
         👋 <span className="opacity-80">
           <a onClick={() => setShowLogin(true)} className="underline cursor-pointer hover:text-accent">Login</a> or
           <a onClick={() => setShowSignup(true)} className="underline cursor-pointer hover:text-accent ml-1">Sign up</a>&nbsp;	
@@ -30,7 +29,7 @@ export default function Hero() {
         </span>
       </div>
 
-      <div className="w-full max-w-[1300px] mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-between gap-10">
+      <div className="w-full max-w-[1300px] mx-auto px-4 flex flex-col-reverse lg:flex-row items-center justify-between gap-4 md:gap-10">
         {/* Text Content */}
         <div className="text-center lg:text-left lg:w-7/12">
           <h1 className="text-2xl md:text-3xl lg:text-5xl font-semibold leading-tight">
@@ -49,12 +48,11 @@ export default function Hero() {
         </div>
 
         {/* Hero Image */}
-        <div className="w-full max-w-sm mx-auto lg:mx-0 relative flex justify-center lg:justify-start">
-          <img src={heroLight} alt="Hero" className="hidden h-[40vh] dark:hidden" />
+        <div className="w-full max-w-sm mx-auto lg:mx-0 relative flex justify-center">
           <img
-            src={heroDark}
+            src={hero}
             alt="Hero Dark"
-            className="h-[40vh] hidden dark:hidden drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]"
+            className="drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]"
           />
         </div>
       </div>
