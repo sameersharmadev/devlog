@@ -1,4 +1,4 @@
-Devlog is a modern, full-stack collaborative developer focussed blogging platform built with a strong emphasis on user experience, customizability, and adherence to contemporary software development best practices. It enables developers and writers to publish content, connect with others, and personalize their experience through a refined and intuitive interface.
+Devlog is a modern, full-stack collaborative developer focussed blogging platform built with a strong emphasis on user experience, customizability, and software development best practices. It enables developers and writers to publish content, connect with others, and personalize their experience through a refined and intuitive interface.
 
 ![brand image](https://github.com/user-attachments/assets/15d22391-b0ad-4c99-8fe5-b58feba6ad57)
 
