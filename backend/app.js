@@ -19,7 +19,8 @@ app.use(cors({
   origin: [
     'http://localhost:5173',
     'https://devlog-hmcjvqzxi-sameer-sharmas-projects-ccb3db7d.vercel.app',
-    'https://devlog.sameersharma.me'
+    'https://devlog.sameersharma.me',
+    'https://devlog-mauve.vercel.app/'
   ],
   credentials: true
 }));
