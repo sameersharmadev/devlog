@@ -46,15 +46,6 @@ export default function Hero() {
             Join the community
           </button>
         </div>
-
-        {/* Hero Image */}
-        <div className="w-full max-w-sm mx-auto lg:mx-0 relative flex justify-center">
-          <img
-            src={hero}
-            alt="Hero Dark"
-            className="drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]"
-          />
-        </div>
       </div>
 
       {showSignup && <SignupPopup onClose={() => setShowSignup(false)} />}
