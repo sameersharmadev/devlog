@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react';
 import { Send } from 'lucide-react';
-
 export default function CommentForm({
   postId,
   parentCommentId,
